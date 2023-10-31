@@ -33,6 +33,10 @@ public class DepartmentServiceTest {
   }
 
 
+    @Test
+    public void findOneTest(){
+        System.out.println(departmentService.find(1000L));
+    }
 
 
 

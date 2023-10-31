@@ -20,4 +20,20 @@ public class NetCode {
      * 更新部门失败
      */
     public static final int UPDATE_DEPARTMENT_ERROR = 0x12;
+    /**
+     * 手机号不能空
+     */
+    public static final int PHONE_INVALID = 0x13;
+    /**
+     * 用户名不能空
+     */
+    public static final int USERNAME_INVALID = 0X14;
+    /**
+     * 邮箱不能空
+     */
+    public static final int EMAIL_INVALID = 0x15;
+    /**
+     * 验证did的
+     */
+    public static final int DID_INVALID = 0X16;
 }

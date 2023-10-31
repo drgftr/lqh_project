@@ -9,6 +9,7 @@ import org.lqh.home.net.NetResult;
 import org.lqh.home.net.param.DepartmentParam;
 import org.lqh.home.service.IDepartmentService;
 import org.lqh.home.utils.ResultGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +27,7 @@ public class DepartmentController {
 
     private IDepartmentService iDepartmentService;
 
+    @Autowired
     public DepartmentController(IDepartmentService iDepartmentService){
         this.iDepartmentService = iDepartmentService;
     }
@@ -33,7 +35,7 @@ public class DepartmentController {
     @ApiOperation("添加部门")
     @PostMapping("/add")
     public NetResult add(@RequestBody  DepartmentParam departmentParam){
-        System.out.println(departmentParam);
+        System.out.println("--------------"+departmentParam);
         try {
             Department department = new Department();
             department.setSn(departmentParam.getSn());
