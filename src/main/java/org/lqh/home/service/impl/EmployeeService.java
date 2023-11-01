@@ -8,6 +8,8 @@ import org.lqh.home.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @description: TODO 类描述
  * @author: 丁真
@@ -34,5 +36,30 @@ public class EmployeeService implements IEmployeeService {
             employee.setDepartment(department);
             return true;
         }
+    }
+
+    @Override
+    public int resign(Long id) {
+        return employeeMapper.resign(id);
+    }
+
+    @Override
+    public Employee findIncumbency(Long id) {
+        return employeeMapper.findIncumbency(id);
+    }
+
+    @Override
+    public void update(Employee employee) {
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public Employee findById(Long id) {
+        return employeeMapper.findById(id);
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        return employeeMapper.findAll();
     }
 }

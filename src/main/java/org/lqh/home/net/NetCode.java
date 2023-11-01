@@ -36,4 +36,12 @@ public class NetCode {
      * 验证did的
      */
     public static final int DID_INVALID = 0X16;
+    /**
+     * 验证id的
+     */
+    public static final int ID_INVALID = 0x17;
+    /**
+     * 修改人员
+     */
+    public static final int UPDATE_INVALID_ERROR = 0x18;
 }

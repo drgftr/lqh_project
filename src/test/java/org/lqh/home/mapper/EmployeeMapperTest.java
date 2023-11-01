@@ -32,4 +32,22 @@ public class EmployeeMapperTest {
         employeeMapper.add(employee);
         System.out.println(employee);
     }
+
+    @Test
+    public void testResign(){
+        employeeMapper.resign(316l);
+    }
+
+    @Test
+    public void testFind(){
+        System.out.println(employeeMapper.findIncumbency(317l)==null);
+    }
+
+    @Test
+    public void testUpdate(){
+        Employee employee = employeeMapper.findIncumbency(318l);
+        employee.setPassword("123123");
+        employee.setAge(123);
+        employeeMapper.update(employee);
+    }
 }

@@ -26,7 +26,7 @@ public class Employee {
     private String password;
     //年龄
     private int age;
-    //状态0注册 -1离职
+    //状态0正常 1离职
     private int state;
     //方便传数据的
     private Department department;
