@@ -35,7 +35,7 @@ public class EmployeeMapperTest {
 
     @Test
     public void testResign(){
-        employeeMapper.resign(316l);
+        employeeMapper.delete(316l);
     }
 
     @Test

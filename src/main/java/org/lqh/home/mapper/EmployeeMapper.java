@@ -19,8 +19,8 @@ public interface EmployeeMapper {
     @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
     int add(Employee d);
 
-    @Update("update t_employee set state=1 where id=#{id}")
-    int resign(Long id);
+    @Delete("delete from t_employee where id=#{id}")
+    int delete(Long id);
 
     /**
      * 找在职人员的
@@ -31,7 +31,7 @@ public interface EmployeeMapper {
     Employee findIncumbency(Long id);
 
     @Update("update t_employee set " +
-            " username=#{username},email=#{email},phone=#{phone},password=#{password},age=#{age} " +
+            " username=#{username},email=#{email},phone=#{phone},password=#{password},age=#{age},state=#{state} " +
             " where id=#{id}")
     void update(Employee employee);
 

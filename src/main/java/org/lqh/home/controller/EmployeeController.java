@@ -60,46 +60,40 @@ public class EmployeeController {
         return ResultGenerator.genSuccessResult(employee);
     }
 
-    @PostMapping("/resign")
-    public NetResult  delete(Long id){
-        //md java.lang.NullPointerException: null
-//        if(id<=0l){
-//            return ResultGenerator.genErrorResult(NetCode.ID_INVALID,"非法id");
-//        }
-        System.out.println(id);
-        System.out.println(iEmployeeService.findIncumbency(id)==null);
-        if(iEmployeeService.findIncumbency(id)==null){
-            return ResultGenerator.genErrorResult(NetCode.ID_INVALID,"该员工未在职/暂无此人");
-        }
+    @PostMapping("/delete")
+    public NetResult delete(Long id){
 
-        int i = iEmployeeService.resign(id);
-        if(i==0){
-            return ResultGenerator.genErrorResult(NetCode.ID_INVALID,"离职失败");
+        System.out.println("---------");
+        System.out.println(id);
+        int result = iEmployeeService.delete(id);
+        if (result==1){
+            return ResultGenerator.genSuccessResult(id+"删除成功");
         }
-        return ResultGenerator.genSuccessResult(id+"离职成功");
+        return ResultGenerator.genSuccessResult(id+"删除失败");
     }
 
     @PostMapping("/edit")
     public NetResult edit(@RequestBody Employee employee){
+        System.out.println("-------------");
         System.out.println(employee);
         try {
-            Employee employee1 = iEmployeeService.findById(employee.getId());
-            //密码要md5加密
+//            Employee employee1 = iEmployeeService.findById(employee.getId());
+//            //密码要md5加密
             if (!StringUtils.isEmpty(employee.getPassword())){
                 employee.setPassword(MD5Util.MD5Encode(employee.getPassword(),"utf-8"));
             }
-            if(StringUtils.isEmpty(employee.getUsername())){
-                employee.setUsername(employee1.getUsername());
-            }
-            if(StringUtils.isEmpty(employee.getEmail())){
-                employee.setEmail(employee1.getEmail());
-            }
-            if(StringUtils.isEmpty(employee.getPhone())){
-                employee.setPhone(employee1.getPhone());
-            }
-            if(employee.getAge()!=employee1.getAge()){
-                employee.setAge(employee1.getAge());
-            }
+//            if(StringUtils.isEmpty(employee.getUsername())){
+//                employee.setUsername(employee1.getUsername());
+//            }
+//            if(StringUtils.isEmpty(employee.getEmail())){
+//                employee.setEmail(employee1.getEmail());
+//            }
+//            if(StringUtils.isEmpty(employee.getPhone())){
+//                employee.setPhone(employee1.getPhone());
+//            }
+//            if(employee.getAge()!=employee1.getAge()){
+//                employee.setAge(employee1.getAge());
+//            }
             iEmployeeService.update(employee);
             return ResultGenerator.genSuccessResult("修改成功");
         }catch (Exception e){
@@ -115,8 +109,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/findall")
-    public List<Employee> findAll(){
-        return iEmployeeService.findAll();
+    public NetResult findAll(){
+        List<Employee> employees = iEmployeeService.findAll();
+        return ResultGenerator.genSuccessResult(employees);
     }
 
 

@@ -56,6 +56,7 @@ public class DepartmentController {
 
     @PostMapping("/delete")
     public NetResult delete(Long id){
+        System.out.println(id);
         try {
             iDepartmentService.remove(id);
             return ResultGenerator.genSuccessResult(id);

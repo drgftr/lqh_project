@@ -11,7 +11,7 @@ import java.util.List;
  **/
 public interface IEmployeeService {
     boolean add(Employee employee);
-    int resign(Long id);
+    int delete(Long id);
     Employee findIncumbency(Long id);
     void update(Employee employee);
     Employee findById(Long id);

@@ -39,8 +39,8 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public int resign(Long id) {
-        return employeeMapper.resign(id);
+    public int delete(Long id) {
+        return employeeMapper.delete(id);
     }
 
     @Override

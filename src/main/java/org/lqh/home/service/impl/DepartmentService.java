@@ -38,7 +38,7 @@ public class DepartmentService implements IDepartmentService {
         departmentMapper.add(d);
     }
 
-    @Transactional
+
     @Override
     public void remove(Long id) {
         departmentMapper.remove(id);
