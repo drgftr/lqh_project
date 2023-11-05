@@ -34,6 +34,11 @@ public class EmployeeMapperTest {
     }
 
     @Test
+    public void testFindByUsername(){
+        System.out.println(employeeMapper.findByUsername("丁真"));
+    }
+
+    @Test
     public void testResign(){
         employeeMapper.delete(316l);
     }
@@ -49,5 +54,13 @@ public class EmployeeMapperTest {
         employee.setPassword("123123");
         employee.setAge(123);
         employeeMapper.update(employee);
+    }
+
+    @Test
+    public void testLogin(){
+        Employee employee = new Employee();
+        employee.setUsername("丁真1");
+        employee.setPassword("666666");
+        System.out.println(employeeMapper.login(employee));
     }
 }

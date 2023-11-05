@@ -16,4 +16,6 @@ public interface IEmployeeService {
     void update(Employee employee);
     Employee findById(Long id);
     List<Employee> findAll();
+    Employee findByUsername(String username);
+    Employee login(Employee employee);
 }

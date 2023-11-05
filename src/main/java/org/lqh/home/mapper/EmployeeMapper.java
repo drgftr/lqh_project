@@ -22,6 +22,9 @@ public interface EmployeeMapper {
     @Delete("delete from t_employee where id=#{id}")
     int delete(Long id);
 
+    @Select("select * from t_employee where username=#{username}")
+    Employee findByUsername(String username);
+
     /**
      * 找在职人员的
      * @param id
@@ -40,4 +43,7 @@ public interface EmployeeMapper {
 
     @Select("select * from t_employee")
     List<Employee> findAll();
+
+    @Select("select * from t_employee where username=#{username} and password=#{password}")
+    Employee login(Employee employee);
 }

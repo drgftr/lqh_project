@@ -62,4 +62,14 @@ public class EmployeeService implements IEmployeeService {
     public List<Employee> findAll() {
         return employeeMapper.findAll();
     }
+
+    @Override
+    public Employee findByUsername(String username) {
+        return employeeMapper.findByUsername(username);
+    }
+
+    @Override
+    public Employee login(Employee employee) {
+        return employeeMapper.login(employee);
+    }
 }

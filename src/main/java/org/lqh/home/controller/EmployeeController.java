@@ -33,6 +33,10 @@ public class EmployeeController {
 
     @PostMapping("/add")
     public NetResult add(@RequestBody Employee employee){
+        Employee employee1 = iEmployeeService.findByUsername(employee.getUsername());
+        if(employee1!=null){
+            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"已有该名,不能继续添加");
+        }
         if (StringUtils.isEmpty(employee.getPhone())){
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,"手机号不能为空");
         }
@@ -112,6 +116,22 @@ public class EmployeeController {
     public NetResult findAll(){
         List<Employee> employees = iEmployeeService.findAll();
         return ResultGenerator.genSuccessResult(employees);
+    }
+
+    @PostMapping("/login")
+    public NetResult login(@RequestBody Employee employee){
+        if (StringUtils.isEmpty(employee.getUsername())){
+            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"用户名不能为空");
+        }
+        if (StringUtils.isEmpty(employee.getPassword())){
+            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"密码不能为空");
+        }
+        employee.setPassword(MD5Util.MD5Encode(employee.getPassword(),"utf-8"));
+        Employee employee1 = iEmployeeService.login(employee);
+        if(employee1!=null){
+            return ResultGenerator.genSuccessResult("登录成功");
+        }
+        return ResultGenerator.genFailResult("账号或密码错误");
     }
 
 

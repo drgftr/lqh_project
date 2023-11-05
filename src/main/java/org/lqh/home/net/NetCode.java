@@ -44,4 +44,20 @@ public class NetCode {
      * 修改人员
      */
     public static final int UPDATE_INVALID_ERROR = 0x18;
+    /**
+     * 店铺名不能空
+     */
+    public static final int SHOP_NAME_INVALID = 0x19;
+    /**
+     * 手机号不能空
+     */
+    public static final int PHONE_NAME_INVALID = 0x20;
+    /**
+     * logo不能空
+     */
+    public static final int LOGO_NAME_INVALID = 0x21;
+    /**
+     * 店铺地址不能空
+     */
+    public static final int ADDRESS_NAME_INVALID = 0x22;
 }
