@@ -9,11 +9,11 @@ import org.lqh.home.net.NetResult;
 import org.lqh.home.service.IShopService;
 import org.lqh.home.service.impl.ShopService;
 import org.lqh.home.utils.ResultGenerator;
+import org.lqh.home.utils.ShopUtil;
 import org.lqh.home.utils.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @description: TODO 类描述
@@ -80,7 +80,7 @@ public class ShopController {
     }
 
     @PostMapping("/delete")
-    public NetResult delete(@RequestBody  Long id){
+    public NetResult delete(Long id){
 
         System.out.println("---------");
         System.out.println(id);
@@ -102,6 +102,19 @@ public class ShopController {
             e.printStackTrace();
             return ResultGenerator.genFailResult("修改失败");
         }
+    }
+
+    @PostMapping("/paginationList")
+    public NetResult list(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize){
+
+        // 获取总记录数
+        int count = iShopService.count();
+        int offset = (page-1) * pageSize;
+        List<Shop> shops = iShopService.paginationList(offset,pageSize);
+        ShopUtil shopUtil = new ShopUtil();
+        shopUtil.shops=shops;
+        shopUtil.total = count;
+        return ResultGenerator.genSuccessResult(shopUtil);
     }
 
 }

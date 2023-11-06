@@ -30,4 +30,10 @@ public interface ShopMapper {
 
     @Update("update t_shop set name=#{name},tel=#{tel},state=#{state},address=#{address} where id=#{id}")
     void update(Shop shop);
+
+    @Select("SELECT * FROM t_shop LIMIT #{offset}, #{pageSize}")
+    List<Shop> paginationList(@Param("offset") int offset, @Param("pageSize") int pageSize);
+
+    @Select("SELECT COUNT(*) FROM t_shop")
+    int count();
 }

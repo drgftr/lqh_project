@@ -1,5 +1,6 @@
 package org.lqh.home.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.lqh.home.entity.Shop;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface IShopService {
     void updateAdminId(Long id);
     int delete(Long id);
     void update(Shop shop);
+    List<Shop> paginationList(@Param("offset") int offset, @Param("pageSize") int pageSize);
+    int count();
 }

@@ -1,8 +1,8 @@
 package org.lqh.home.controller;
 
+import org.lqh.home.common.Constants;
 import org.lqh.home.entity.Department;
 import org.lqh.home.entity.Employee;
-import org.lqh.home.mapper.DepartmentMapper;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
 import org.lqh.home.service.IDepartmentService;
@@ -38,7 +38,7 @@ public class EmployeeController {
             return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"已有该名,不能继续添加");
         }
         if (StringUtils.isEmpty(employee.getPhone())){
-            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,"手机号不能为空");
+            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, Constants.PHONE_IS_NULL);
         }
         if (StringUtils.isEmpty(employee.getUsername())){
             return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"用户名不能为空");
@@ -118,8 +118,9 @@ public class EmployeeController {
         return ResultGenerator.genSuccessResult(employees);
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login" ,produces = {"application/json", "application/xml"})
     public NetResult login(@RequestBody Employee employee){
+        System.out.println(employee);
         if (StringUtils.isEmpty(employee.getUsername())){
             return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"用户名不能为空");
         }
