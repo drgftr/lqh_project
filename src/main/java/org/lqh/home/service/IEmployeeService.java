@@ -1,6 +1,7 @@
 package org.lqh.home.service;
 
 import org.lqh.home.entity.Employee;
+import org.lqh.home.net.param.LoginParam;
 
 import java.util.List;
 
@@ -17,5 +18,6 @@ public interface IEmployeeService {
     Employee findById(Long id);
     List<Employee> findAll();
     Employee findByUsername(String username);
-    Employee login(Employee employee);
+    Employee login(LoginParam loginParam);
+    Employee select(String phone,String password);
 }

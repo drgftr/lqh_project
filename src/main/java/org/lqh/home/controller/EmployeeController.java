@@ -11,9 +11,12 @@ import org.lqh.home.utils.MD5Util;
 import org.lqh.home.utils.ResultGenerator;
 import org.lqh.home.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 雇员控制器
@@ -24,11 +27,13 @@ public class EmployeeController {
 
     private IDepartmentService iDepartmentService;
     private IEmployeeService iEmployeeService;
+    private RedisTemplate redisTemplate;
 
     @Autowired
-    public EmployeeController(IDepartmentService iDepartmentService,IEmployeeService iEmployeeService){
+    public EmployeeController(IDepartmentService iDepartmentService,IEmployeeService iEmployeeService,RedisTemplate redisTemplate){
         this.iDepartmentService = iDepartmentService;
         this.iEmployeeService = iEmployeeService;
+        this.redisTemplate = redisTemplate;
     }
 
     @PostMapping("/add")
@@ -118,22 +123,7 @@ public class EmployeeController {
         return ResultGenerator.genSuccessResult(employees);
     }
 
-    @PostMapping(value = "/login" ,produces = {"application/json", "application/xml"})
-    public NetResult login(@RequestBody Employee employee){
-        System.out.println(employee);
-        if (StringUtils.isEmpty(employee.getUsername())){
-            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"用户名不能为空");
-        }
-        if (StringUtils.isEmpty(employee.getPassword())){
-            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"密码不能为空");
-        }
-        employee.setPassword(MD5Util.MD5Encode(employee.getPassword(),"utf-8"));
-        Employee employee1 = iEmployeeService.login(employee);
-        if(employee1!=null){
-            return ResultGenerator.genSuccessResult("登录成功");
-        }
-        return ResultGenerator.genFailResult("账号或密码错误");
-    }
+
 
 
 }

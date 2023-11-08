@@ -35,6 +35,6 @@ public class TestRedis {
     public void test(){
         redisService.cacheSet("1","2",60);
         System.out.println("---");
-        System.out.println(redisService.getValue("1"));
+        System.out.println(redisService.getSet("1"));
     }
 }

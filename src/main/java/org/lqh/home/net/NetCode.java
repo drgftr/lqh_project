@@ -60,4 +60,13 @@ public class NetCode {
      * 店铺地址不能空
      */
     public static final int ADDRESS_NAME_INVALID = 0x22;
+    /**
+     * token 不存在
+     */
+    public static final int TOKEN_NOT_EXIST = 0X23;
+
+    /**
+     * token过期
+     */
+    public static final int TOKEN_INVALID = 0X23;
 }

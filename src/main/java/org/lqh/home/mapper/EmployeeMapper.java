@@ -2,7 +2,9 @@ package org.lqh.home.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.lqh.home.entity.Employee;
+import org.lqh.home.net.param.LoginParam;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -45,5 +47,8 @@ public interface EmployeeMapper {
     List<Employee> findAll();
 
     @Select("select * from t_employee where username=#{username} and password=#{password}")
-    Employee login(Employee employee);
+    Employee login(LoginParam loginParam);
+
+    @Select("select * from t_employee where phone=#{phone} and password=#{password}")
+    Employee select(String phone,String password);
 }

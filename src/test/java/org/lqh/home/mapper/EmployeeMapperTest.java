@@ -61,6 +61,11 @@ public class EmployeeMapperTest {
         Employee employee = new Employee();
         employee.setUsername("丁真1");
         employee.setPassword("666666");
-        System.out.println(employeeMapper.login(employee));
+//        System.out.println(employeeMapper.login(employee));
+    }
+
+    @Test
+    public void testSelect(){
+        System.out.println(employeeMapper.select("123","123123"));
     }
 }

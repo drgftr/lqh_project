@@ -1,4 +1,4 @@
-package org.lqh.home.controller;
+package org.lqh.home.common;
 
 /**
  * @description: TODO 类描述

@@ -4,6 +4,7 @@ import org.lqh.home.entity.Department;
 import org.lqh.home.entity.Employee;
 import org.lqh.home.mapper.DepartmentMapper;
 import org.lqh.home.mapper.EmployeeMapper;
+import org.lqh.home.net.param.LoginParam;
 import org.lqh.home.service.IEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,7 +70,14 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public Employee login(Employee employee) {
-        return employeeMapper.login(employee);
+    public Employee login(LoginParam loginParam) {
+        return employeeMapper.login(loginParam);
     }
+
+    @Override
+    public Employee select(String phone, String password) {
+        return employeeMapper.select(phone, password);
+    }
+
+
 }

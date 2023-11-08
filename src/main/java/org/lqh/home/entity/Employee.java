@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @description: TODO 类描述
  * @author: 丁真
@@ -12,7 +14,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-public class Employee {
+public class Employee implements Serializable {
     public Long id;
     //员工部门id
     private Long did;
@@ -30,5 +32,7 @@ public class Employee {
     private int state;
     //方便传数据的
     private Department department;
+
+    private String token;
 
 }

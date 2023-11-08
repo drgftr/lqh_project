@@ -98,8 +98,6 @@ public class RedisService implements IRedisService {
     public String getValue(String key) {
         try {
             ValueOperations<String,String> ops = redisTemplate.opsForValue();
-            System.out.println(key);
-            System.out.println(ops.get(KEY_PREFIX_KEY+key));
             return  ops.get(KEY_PREFIX_KEY+key);
         }catch (Throwable e){
             log.error("根据 key 获取缓存失败，当前key:[{}],失败原因 Codeor:[{}]", key, e);
@@ -127,7 +125,6 @@ public class RedisService implements IRedisService {
         try {
             String key = KEY_PREFIX_SET+k;
             SetOperations<String,String> opsForSet = redisTemplate.opsForSet();
-            System.out.println(key);
             opsForSet.add(key,v);
             if (time>0){
                 redisTemplate.expire(key,time,TimeUnit.SECONDS);
