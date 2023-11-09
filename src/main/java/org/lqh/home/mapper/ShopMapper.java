@@ -16,7 +16,7 @@ import java.util.List;
 public interface ShopMapper {
     @Insert("insert into t_shop(name,tel,registerTime,state,address,logo,admin_id)" +
             "values(#{name},#{tel},#{registerTime},#{state},#{address},#{logo},#{admin.id})")
-    @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int add(Shop shop);
 
     @Select("select * from t_shop")

@@ -12,10 +12,16 @@ import java.util.List;
  **/
 public interface IShopService {
     int add(Shop shop);
+
     List<Shop> list();
+
     void updateAdminId(Long id);
+
     int delete(Long id);
+
     void update(Shop shop);
+
     List<Shop> paginationList(@Param("offset") int offset, @Param("pageSize") int pageSize);
+
     int count();
 }

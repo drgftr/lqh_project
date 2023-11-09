@@ -10,7 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @author: 丁真
  * @date: 2023/11/2
  **/
-public enum  JedisUtil {
+public enum JedisUtil {
     INSTANCE;
 
     private static JedisPool pool;
@@ -19,55 +19,56 @@ public enum  JedisUtil {
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxIdle(2);
         config.setMaxTotal(10);
-        config.setMaxWaitMillis(2*1000);
+        config.setMaxWaitMillis(2 * 1000);
         config.setTestOnBorrow(true);
-        pool = new JedisPool(config,"127.0.0.1",6379,2*1000);
+        pool = new JedisPool(config, "127.0.0.1", 6379, 2 * 1000);
     }
+
     //获取
-    public Jedis getResource(){
+    public Jedis getResource() {
         return pool.getResource();
     }
 
-    public void release(Jedis jedis){
-        if(jedis !=null){
+    public void release(Jedis jedis) {
+        if (jedis != null) {
             jedis.close();
         }
     }
 
-    public void set(String key,String val){
+    public void set(String key, String val) {
         Jedis jedis = null;
         try {
             jedis = this.getResource();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             this.release(jedis);
         }
     }
 
-    public void set(String key,String val,int seconds){
+    public void set(String key, String val, int seconds) {
         Jedis jedis = null;
         try {
             jedis = this.getResource();
             val seconds1 = seconds;
-            jedis.setex(key,seconds,val);
-        }catch (Exception e){
+            jedis.setex(key, seconds, val);
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             this.release(jedis);
         }
     }
 
-    public String get(String key){
+    public String get(String key) {
         Jedis jedis = null;
         try {
             jedis = this.getResource();
-            return  jedis.get(key);
-        }catch (Exception e){
+            return jedis.get(key);
+        } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             this.release(jedis);
         }
-        return  null;
+        return null;
     }
 }

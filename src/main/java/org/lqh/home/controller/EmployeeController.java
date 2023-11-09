@@ -13,10 +13,8 @@ import org.lqh.home.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * 雇员控制器
@@ -30,66 +28,66 @@ public class EmployeeController {
     private RedisTemplate redisTemplate;
 
     @Autowired
-    public EmployeeController(IDepartmentService iDepartmentService,IEmployeeService iEmployeeService,RedisTemplate redisTemplate){
+    public EmployeeController(IDepartmentService iDepartmentService, IEmployeeService iEmployeeService, RedisTemplate redisTemplate) {
         this.iDepartmentService = iDepartmentService;
         this.iEmployeeService = iEmployeeService;
         this.redisTemplate = redisTemplate;
     }
 
     @PostMapping("/add")
-    public NetResult add(@RequestBody Employee employee){
+    public NetResult add(@RequestBody Employee employee) {
         Employee employee1 = iEmployeeService.findByUsername(employee.getUsername());
-        if(employee1!=null){
-            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"已有该名,不能继续添加");
+        if (employee1 != null) {
+            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, "已有该名,不能继续添加");
         }
-        if (StringUtils.isEmpty(employee.getPhone())){
+        if (StringUtils.isEmpty(employee.getPhone())) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, Constants.PHONE_IS_NULL);
         }
-        if (StringUtils.isEmpty(employee.getUsername())){
-            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID,"用户名不能为空");
+        if (StringUtils.isEmpty(employee.getUsername())) {
+            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, "用户名不能为空");
         }
         //没有密码默认123456，进行md5加密
-        if (StringUtils.isEmpty(employee.getPassword())){
-            employee.setPassword(MD5Util.MD5Encode("123456","utf-8"));
-        }else {
-            employee.setPassword(MD5Util.MD5Encode(employee.getPassword(),"utf-8"));
+        if (StringUtils.isEmpty(employee.getPassword())) {
+            employee.setPassword(MD5Util.MD5Encode("123456", "utf-8"));
+        } else {
+            employee.setPassword(MD5Util.MD5Encode(employee.getPassword(), "utf-8"));
         }
-        if (StringUtils.isEmpty(employee.getEmail())){
-            return ResultGenerator.genErrorResult(NetCode.EMAIL_INVALID,"邮箱不能为空");
+        if (StringUtils.isEmpty(employee.getEmail())) {
+            return ResultGenerator.genErrorResult(NetCode.EMAIL_INVALID, "邮箱不能为空");
         }
         Department department = iDepartmentService.find(employee.getDid());
-        if(department==null){
-            return ResultGenerator.genErrorResult(NetCode.DID_INVALID,"非法部门id");
+        if (department == null) {
+            return ResultGenerator.genErrorResult(NetCode.DID_INVALID, "非法部门id");
         }
 
         boolean result = iEmployeeService.add(employee);
-        if (!result){
+        if (!result) {
             return ResultGenerator.genFailResult("添加失败");
         }
         return ResultGenerator.genSuccessResult(employee);
     }
 
     @PostMapping("/delete")
-    public NetResult delete(Long id){
+    public NetResult delete(Long id) {
 
         System.out.println("---------");
         System.out.println(id);
         int result = iEmployeeService.delete(id);
-        if (result==1){
-            return ResultGenerator.genSuccessResult(id+"删除成功");
+        if (result == 1) {
+            return ResultGenerator.genSuccessResult(id + "删除成功");
         }
-        return ResultGenerator.genSuccessResult(id+"删除失败");
+        return ResultGenerator.genSuccessResult(id + "删除失败");
     }
 
     @PostMapping("/edit")
-    public NetResult edit(@RequestBody Employee employee){
+    public NetResult edit(@RequestBody Employee employee) {
         System.out.println("-------------");
         System.out.println(employee);
         try {
 //            Employee employee1 = iEmployeeService.findById(employee.getId());
 //            //密码要md5加密
-            if (!StringUtils.isEmpty(employee.getPassword())){
-                employee.setPassword(MD5Util.MD5Encode(employee.getPassword(),"utf-8"));
+            if (!StringUtils.isEmpty(employee.getPassword())) {
+                employee.setPassword(MD5Util.MD5Encode(employee.getPassword(), "utf-8"));
             }
 //            if(StringUtils.isEmpty(employee.getUsername())){
 //                employee.setUsername(employee1.getUsername());
@@ -105,25 +103,23 @@ public class EmployeeController {
 //            }
             iEmployeeService.update(employee);
             return ResultGenerator.genSuccessResult("修改成功");
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResultGenerator.genErrorResult(NetCode.UPDATE_INVALID_ERROR,"修改信息失败！"+e.getMessage());
+            return ResultGenerator.genErrorResult(NetCode.UPDATE_INVALID_ERROR, "修改信息失败！" + e.getMessage());
         }
     }
 
     @GetMapping("/find")
-    public NetResult find(Long id){
+    public NetResult find(Long id) {
         Employee employee = iEmployeeService.findById(id);
-        return  ResultGenerator.genSuccessResult(employee);
+        return ResultGenerator.genSuccessResult(employee);
     }
 
     @GetMapping("/findall")
-    public NetResult findAll(){
+    public NetResult findAll() {
         List<Employee> employees = iEmployeeService.findAll();
         return ResultGenerator.genSuccessResult(employees);
     }
-
-
 
 
 }

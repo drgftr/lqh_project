@@ -23,16 +23,17 @@ public class EmployeeService implements IEmployeeService {
     private DepartmentMapper departmentMapper;
 
     @Autowired
-    public  EmployeeService(EmployeeMapper employeeMapper,DepartmentMapper departmentMapper){
-        this.employeeMapper =employeeMapper;
+    public EmployeeService(EmployeeMapper employeeMapper, DepartmentMapper departmentMapper) {
+        this.employeeMapper = employeeMapper;
         this.departmentMapper = departmentMapper;
     }
+
     @Override
     public boolean add(Employee employee) {
         int row = employeeMapper.add(employee);
-        if (row==0){
-           return false;
-        }else {
+        if (row == 0) {
+            return false;
+        } else {
             Department department = this.departmentMapper.find(employee.getDid());
             employee.setDepartment(department);
             return true;

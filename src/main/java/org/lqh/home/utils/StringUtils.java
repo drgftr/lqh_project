@@ -8,14 +8,16 @@ package org.lqh.home.utils;
 public class StringUtils {
     /**
      * 判断s是否为null
+     *
      * @param s
      * @return
      */
-    public static boolean isEmpty(String s){
-        return s==null||s.isEmpty();
+    public static boolean isEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 
-    public static boolean isNullOrNullStr(String s){
-        return s==null||s.equals("null");
+    public static boolean isNullOrNullStr(String s) {
+        return s == null || s.equals("null");
     }
+
 }

@@ -17,13 +17,9 @@ import java.util.List;
 
 @Data
 public class DepartmentParam {
-
-
     private String sn;
     private String name;
     private String dirPath;
-    private  int state;
-
+    private int state;
     private long parentId;
-
 }

@@ -19,9 +19,10 @@ public class ShopService implements IShopService {
     private ShopMapper shopMapper;
 
     @Autowired
-    public ShopService(ShopMapper shopMapper){
+    public ShopService(ShopMapper shopMapper) {
         this.shopMapper = shopMapper;
     }
+
     @Override
     public int add(Shop shop) {
         return shopMapper.add(shop);

@@ -13,23 +13,26 @@ import java.util.Set;
 public interface IRedisService {
     /**
      * 添加key：string缓存
+     *
      * @param key
      * @param value
      * @param time
      * @return
      */
-    boolean cacheValue(String key,String value,long time);
+    boolean cacheValue(String key, String value, long time);
 
     /**
      * 添加key：string缓存
+     *
      * @param key
      * @param value
      * @return
      */
-    boolean cacheValue(String key,String value);
+    boolean cacheValue(String key, String value);
 
     /**
      * 判断key：string集合是否存在
+     *
      * @param key
      * @return
      */
@@ -37,6 +40,7 @@ public interface IRedisService {
 
     /**
      * 判断缓存 key:set集合 是否存在
+     *
      * @param key
      * @return
      */
@@ -44,6 +48,7 @@ public interface IRedisService {
 
     /**
      * 判断key：list集合是否存在
+     *
      * @param key
      * @return
      */
@@ -51,6 +56,7 @@ public interface IRedisService {
 
     /**
      * 查询缓存key是否存在
+     *
      * @param key
      * @return
      */
@@ -58,6 +64,7 @@ public interface IRedisService {
 
     /**
      * 根据key获取缓存value
+     *
      * @param key
      * @return
      */
@@ -65,6 +72,7 @@ public interface IRedisService {
 
     /**
      * 根据key移除value缓存
+     *
      * @param key
      * @return
      */
@@ -72,6 +80,7 @@ public interface IRedisService {
 
     /**
      * 根据key移除set缓存
+     *
      * @param key
      * @return
      */
@@ -79,6 +88,7 @@ public interface IRedisService {
 
     /**
      * 根据key移除list缓存
+     *
      * @param key
      * @return
      */
@@ -86,32 +96,36 @@ public interface IRedisService {
 
     /**
      * 缓存 set 操作
+     *
      * @param key
      * @param value
      * @param time
      * @return
      */
-    boolean cacheSet(String key,String value,long time);
+    boolean cacheSet(String key, String value, long time);
 
     /**
      * 添加set缓存
+     *
      * @param key
      * @param value
      * @return
      */
-    boolean cacheSet(String key,String value);
+    boolean cacheSet(String key, String value);
 
     /**
      * 添加 缓存set
+     *
      * @param k
      * @param v
      * @param time
      * @return
      */
-    boolean cacheSet(String k, Set<String> v,long time);
+    boolean cacheSet(String k, Set<String> v, long time);
 
     /**
      * 缓存set
+     *
      * @param k
      * @param v
      * @return
@@ -120,6 +134,7 @@ public interface IRedisService {
 
     /**
      * 获取缓存set数据
+     *
      * @param k
      * @return
      */
@@ -127,49 +142,55 @@ public interface IRedisService {
 
     /**
      * list缓存
+     *
      * @param k
      * @param v
      * @param time
      * @return
      */
-    boolean cacheList(String k,String v,long time);
+    boolean cacheList(String k, String v, long time);
 
     /**
      * 缓存list
+     *
      * @param k
      * @param v
      * @return
      */
-    boolean cacheList(String k,String v);
+    boolean cacheList(String k, String v);
 
     /**
      * 缓存list集合
+     *
      * @param k
      * @param v
      * @param time
      * @return
      */
-    boolean cacheList(String k, List<String>  v,long time);
+    boolean cacheList(String k, List<String> v, long time);
 
     /**
      * 缓存list
+     *
      * @param K
      * @param v
      * @return
      */
-    boolean cacheList(String k,List<String>v);
+    boolean cacheList(String k, List<String> v);
 
     /**
      * 根据 key 获取 list 缓存
+     *
      * @param k
      * @param start
      * @param end
      * @return
      */
-    List<String> getList(String k,long start,long end);
+    List<String> getList(String k, long start, long end);
 
     /**
      * 根据 key 获取总条数 用于分页
+     *
      * @param key
      * @return
      */
@@ -177,14 +198,16 @@ public interface IRedisService {
 
     /**
      * 获取总条数 用于分页
+     *
      * @param listOps
      * @param k
      * @return
      */
-    long getListSize(ListOperations<String,String> listOps,String k);
+    long getListSize(ListOperations<String, String> listOps, String k);
 
     /**
      * 根据key移除list缓存
+     *
      * @param k
      * @return
      */

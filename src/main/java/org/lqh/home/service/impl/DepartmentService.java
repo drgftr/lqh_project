@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @author: 丁真
  * @date: 2023/10/26
  **/
-@Transactional(readOnly = true,propagation = Propagation.SUPPORTS)
+@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 @Service
 public class DepartmentService implements IDepartmentService {
 
@@ -28,7 +28,7 @@ public class DepartmentService implements IDepartmentService {
     private DepartmentMapper departmentMapper;
 
     @Autowired
-    public DepartmentService(DepartmentMapper departmentMapper){
+    public DepartmentService(DepartmentMapper departmentMapper) {
         this.departmentMapper = departmentMapper;
     }
 

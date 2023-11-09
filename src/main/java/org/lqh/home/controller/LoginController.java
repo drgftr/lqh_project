@@ -7,6 +7,7 @@ import org.lqh.home.interceptor.TokenInterceptor;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
 import org.lqh.home.net.param.LoginParam;
+import org.lqh.home.net.param.RegisterParam;
 import org.lqh.home.service.IEmployeeService;
 import org.lqh.home.service.impl.EmployeeService;
 import org.lqh.home.service.impl.RedisService;
@@ -21,10 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @description: TODO 类描述
@@ -50,9 +47,8 @@ public class LoginController {
         this.redisTemplate = redisTemplate;
     }
 
-    @PostMapping(value = "/login" ,produces = {"application/json", "application/xml"})
-    public NetResult login(@RequestBody LoginParam loginParam){
-
+    @PostMapping(value = "/adminlogin" ,produces = {"application/json", "application/xml"})
+    public NetResult adminLogin(@RequestBody LoginParam loginParam){
         System.out.println(loginParam);
         try {
             NetResult netResult = userService.adminLogin(loginParam);
@@ -60,11 +56,20 @@ public class LoginController {
         }catch (Exception e){
             return ResultGenerator.genFailResult("未知异常"+e.getMessage());
         }
-
-
     }
 
-    //登录
+    @PostMapping("/userlogin")
+    public NetResult userLogin(@RequestBody LoginParam loginParam){
+        System.out.println(loginParam);
+        try {
+            NetResult netResult = userService.login(loginParam);
+            return netResult;
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("未知异常"+e.getMessage());
+        }
+    }
+
+    //发验证码的
     @GetMapping("/getverifycode")
     public NetResult sendVerifyCode(@RequestParam String phone){
         return userService.sendRegisterCode(phone);
@@ -97,10 +102,15 @@ public class LoginController {
         }
     }
 
-
-
     //注册
-    public void register(){
-
+    @PostMapping("/register")
+    public NetResult register(RegisterParam registerParam){
+        System.out.println();
+        try {
+            NetResult netResult = userService.register(registerParam);
+            return netResult;
+        }catch (Exception e){
+            return ResultGenerator.genFailResult("未知异常"+e.getMessage());
+        }
     }
 }

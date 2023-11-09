@@ -69,4 +69,8 @@ public class NetCode {
      * token过期
      */
     public static final int TOKEN_INVALID = 0X23;
+    /**
+     * 成年才能注册
+     */
+    public static final int AGE_INVALID = 0x24;
 }

@@ -18,7 +18,7 @@ import java.util.List;
 public interface EmployeeMapper {
     @Insert("insert into t_employee(did,username,email,phone,password,age,state)" +
             "values(#{did},#{username},#{email},#{phone},#{password},#{age},#{state})")
-    @Options(useGeneratedKeys = true,keyProperty = "id",keyColumn = "id")
+    @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int add(Employee d);
 
     @Delete("delete from t_employee where id=#{id}")
@@ -29,6 +29,7 @@ public interface EmployeeMapper {
 
     /**
      * 找在职人员的
+     *
      * @param id
      * @return
      */
@@ -50,5 +51,5 @@ public interface EmployeeMapper {
     Employee login(LoginParam loginParam);
 
     @Select("select * from t_employee where phone=#{phone} and password=#{password}")
-    Employee select(String phone,String password);
+    Employee select(String phone, String password);
 }

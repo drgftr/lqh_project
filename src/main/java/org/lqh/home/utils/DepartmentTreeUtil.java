@@ -14,16 +14,17 @@ import java.util.stream.Collectors;
 public class DepartmentTreeUtil {
     /**
      * list 转 tree
+     *
      * @param nodes
      * @return
      */
-    public static List<Department> listToTree(List<Department> nodes){
-        Map<Long,List<Department>> nodeMap = nodes.stream().filter(node->node.getParentId()!=0)
-                .collect(Collectors.groupingBy(node->node.getParent().getId()));
+    public static List<Department> listToTree(List<Department> nodes) {
+        Map<Long, List<Department>> nodeMap = nodes.stream().filter(node -> node.getParentId() != 0)
+                .collect(Collectors.groupingBy(node -> node.getParent().getId()));
 
         nodes.forEach(node -> node.setChildren(nodeMap.get(node.getId())));
 
-        List<Department> treeNode = nodes.stream().filter(node ->node.getParentId()==0).collect(Collectors.toList());
+        List<Department> treeNode = nodes.stream().filter(node -> node.getParentId() == 0).collect(Collectors.toList());
         return treeNode;
     }
 }

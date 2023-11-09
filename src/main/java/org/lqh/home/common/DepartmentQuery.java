@@ -8,5 +8,6 @@ package org.lqh.home.common;
 public class DepartmentQuery {
 
     public int start;
+
     public int pageSize;
 }

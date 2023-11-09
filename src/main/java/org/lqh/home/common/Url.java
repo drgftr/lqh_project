@@ -6,12 +6,12 @@ package org.lqh.home.common;
  * @date: 2023/11/6
  **/
 public class Url {
-    public static final String DEPARTMENT_ADD_URL ="/department/add";
-    public static final String DEPARTMENT_DELETE_URL ="/department/delete";
-    public static final String DEPARTMENT_UPDATE_URL ="/department/update";
-    public static final String DEPARTMENT_GETBYID_URL ="/department/get";
-    public static final String DEPARTMENT_GETALL_URL ="/department/list";
-    public static final String DEPARTMENT_LISTTOTREE_URL ="/department/tree";
+    public static final String DEPARTMENT_ADD_URL = "/department/add";
+    public static final String DEPARTMENT_DELETE_URL = "/department/delete";
+    public static final String DEPARTMENT_UPDATE_URL = "/department/update";
+    public static final String DEPARTMENT_GETBYID_URL = "/department/get";
+    public static final String DEPARTMENT_GETALL_URL = "/department/list";
+    public static final String DEPARTMENT_LISTTOTREE_URL = "/department/tree";
     public static final String EMPLOYEE_ADD_URL = "/employee/add";
     public static final String EMPLOYEE_EDIT_URL = "/employee/edit";
     public static final String EMPLOYEE_FINDBYID_URL = "/employee/find";

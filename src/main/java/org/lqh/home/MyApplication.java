@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * (exclude = { DataSourceAutoConfiguration.class })
+ *
  * @description: TODO 类描述
  * @author: 丁真
  * @date: 2023/10/26

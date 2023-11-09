@@ -2,7 +2,6 @@ package org.lqh.home.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.lqh.home.entity.Department;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
@@ -10,7 +9,6 @@ import org.lqh.home.net.param.DepartmentParam;
 import org.lqh.home.service.IDepartmentService;
 import org.lqh.home.utils.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
