@@ -9,7 +9,7 @@ import org.lqh.home.service.IDepartmentService;
 import org.lqh.home.service.IEmployeeService;
 import org.lqh.home.utils.MD5Util;
 import org.lqh.home.utils.ResultGenerator;
-import org.lqh.home.utils.StringUtils;
+import org.lqh.home.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -40,19 +40,19 @@ public class EmployeeController {
         if (employee1 != null) {
             return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, "已有该名,不能继续添加");
         }
-        if (StringUtils.isEmpty(employee.getPhone())) {
+        if (StringUtil.isEmpty(employee.getPhone())) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, Constants.PHONE_IS_NULL);
         }
-        if (StringUtils.isEmpty(employee.getUsername())) {
+        if (StringUtil.isEmpty(employee.getUsername())) {
             return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, "用户名不能为空");
         }
         //没有密码默认123456，进行md5加密
-        if (StringUtils.isEmpty(employee.getPassword())) {
+        if (StringUtil.isEmpty(employee.getPassword())) {
             employee.setPassword(MD5Util.MD5Encode("123456", "utf-8"));
         } else {
             employee.setPassword(MD5Util.MD5Encode(employee.getPassword(), "utf-8"));
         }
-        if (StringUtils.isEmpty(employee.getEmail())) {
+        if (StringUtil.isEmpty(employee.getEmail())) {
             return ResultGenerator.genErrorResult(NetCode.EMAIL_INVALID, "邮箱不能为空");
         }
         Department department = iDepartmentService.find(employee.getDid());
@@ -86,16 +86,16 @@ public class EmployeeController {
         try {
 //            Employee employee1 = iEmployeeService.findById(employee.getId());
 //            //密码要md5加密
-            if (!StringUtils.isEmpty(employee.getPassword())) {
+            if (!StringUtil.isEmpty(employee.getPassword())) {
                 employee.setPassword(MD5Util.MD5Encode(employee.getPassword(), "utf-8"));
             }
-//            if(StringUtils.isEmpty(employee.getUsername())){
+//            if(StringUtil.isEmpty(employee.getUsername())){
 //                employee.setUsername(employee1.getUsername());
 //            }
-//            if(StringUtils.isEmpty(employee.getEmail())){
+//            if(StringUtil.isEmpty(employee.getEmail())){
 //                employee.setEmail(employee1.getEmail());
 //            }
-//            if(StringUtils.isEmpty(employee.getPhone())){
+//            if(StringUtil.isEmpty(employee.getPhone())){
 //                employee.setPhone(employee1.getPhone());
 //            }
 //            if(employee.getAge()!=employee1.getAge()){

@@ -24,4 +24,6 @@ public interface IShopService {
     List<Shop> paginationList(@Param("offset") int offset, @Param("pageSize") int pageSize);
 
     int count();
+
+    Shop findById(long id);
 }

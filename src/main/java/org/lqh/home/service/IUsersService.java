@@ -18,4 +18,7 @@ public interface IUsersService {
     Users getAdmin(String phone, String password);
 
     Users selectPhone(String phone);
+
+    Users findById(long id);
+
 }

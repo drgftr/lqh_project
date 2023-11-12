@@ -37,6 +37,7 @@ public class TokenConfig implements WebMvcConfigurer {
                 "/register",
                 "/adminlogin",
                 "/userlogin"
+
         );
     }
 }

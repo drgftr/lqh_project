@@ -5,7 +5,7 @@ package org.lqh.home.utils;
  * @author: 丁真
  * @date: 2023/10/31
  **/
-public class StringUtils {
+public class StringUtil {
     /**
      * 判断s是否为null
      *

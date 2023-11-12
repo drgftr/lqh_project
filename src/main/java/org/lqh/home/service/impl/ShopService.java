@@ -57,4 +57,9 @@ public class ShopService implements IShopService {
     public int count() {
         return shopMapper.count();
     }
+
+    @Override
+    public Shop findById(long id) {
+        return shopMapper.findById(id);
+    }
 }

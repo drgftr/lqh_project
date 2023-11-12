@@ -5,10 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.lqh.home.common.Constants;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
-import org.lqh.home.utils.StringUtils;
+import org.lqh.home.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -41,7 +40,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         logger.info("请求来了" + request.getRequestURL().toString());
         //要求接口里面的请求头必须有token
         String token = request.getHeader("token");
-        if (!StringUtils.isEmpty(token)) {
+        if (!StringUtil.isEmpty(token)) {
             //如果token有,那么就去redis拿到token 对应的用户信息
             Object obj = redisTemplate.opsForValue().get(token);
             if (obj == null) {

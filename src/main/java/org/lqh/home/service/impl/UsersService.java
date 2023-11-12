@@ -41,4 +41,9 @@ public class UsersService implements IUsersService {
     public Users selectPhone(String phone) {
         return usersMapper.selectPhone(phone);
     }
+
+    @Override
+    public Users findById(long id) {
+        return usersMapper.findById(id);
+    }
 }

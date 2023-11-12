@@ -73,4 +73,29 @@ public class NetCode {
      * 成年才能注册
      */
     public static final int AGE_INVALID = 0x24;
+
+    /**
+     * 宠物名不能空
+     */
+    public static final int PET_NAME_INVALID = 0x25;
+    /**
+     * 地址不能空
+     */
+    public static final int ADDRESS_INVALID = 0x26;
+    /**
+     * 性别不能空
+     */
+    public static final int SEX_INVALID = 0x27;
+    /**
+     * 接种不能<0
+     */
+    public static final int ISINOCULATION_INVALID =0x28 ;
+    /**
+     * 生日错误
+     */
+    public static final int BIRTH_INVALID = 0x29;
+    /**
+     * 没有这个id
+     */
+    public static final int ADMINID_INVALID = 0x30;
 }

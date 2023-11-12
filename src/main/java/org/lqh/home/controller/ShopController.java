@@ -8,7 +8,7 @@ import org.lqh.home.net.NetResult;
 import org.lqh.home.service.IShopService;
 import org.lqh.home.utils.ResultGenerator;
 import org.lqh.home.utils.ShopUtil;
-import org.lqh.home.utils.StringUtils;
+import org.lqh.home.utils.StringUtil;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,16 +31,16 @@ public class ShopController {
 
     @PostMapping("/register")
     public NetResult ShopRegister(@RequestBody Shop shop) {
-        if (StringUtils.isEmpty(shop.getName())) {
+        if (StringUtil.isEmpty(shop.getName())) {
             return ResultGenerator.genErrorResult(NetCode.SHOP_NAME_INVALID, "店铺名不能空");
         }
-        if (StringUtils.isEmpty(shop.getTel())) {
+        if (StringUtil.isEmpty(shop.getTel())) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_NAME_INVALID, "手机号不能空");
         }
-        if (StringUtils.isEmpty(shop.getLogo())) {
+        if (StringUtil.isEmpty(shop.getLogo())) {
             return ResultGenerator.genErrorResult(NetCode.LOGO_NAME_INVALID, "店铺名不能空");
         }
-        if (StringUtils.isEmpty(shop.getAddress())) {
+        if (StringUtil.isEmpty(shop.getAddress())) {
             return ResultGenerator.genErrorResult(NetCode.ADDRESS_NAME_INVALID, "logo不能空");
         }
 

@@ -18,7 +18,7 @@ public interface IUserService {
 
     NetResult adminLogin(LoginParam loginParam);
 
-    NetResult login(LoginParam loginParam);
+    NetResult login(LoginParam loginParam) throws Exception;
 
     NetResult register(RegisterParam registerParam);
 }

@@ -9,7 +9,9 @@ import lombok.Data;
  **/
 @Data
 public class LoginParam {
-    String phone;
-    String password;
-    String username;
+    private String phone;
+    private String password;
+    private String username;
+    //type 1管理员 type 0用户
+    private int type;
 }
