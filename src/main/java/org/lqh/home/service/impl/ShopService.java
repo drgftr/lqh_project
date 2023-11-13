@@ -62,4 +62,9 @@ public class ShopService implements IShopService {
     public Shop findById(long id) {
         return shopMapper.findById(id);
     }
+
+    @Override
+    public Shop findByAddress(String address) {
+        return shopMapper.findByAddress(address);
+    }
 }

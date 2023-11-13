@@ -24,4 +24,9 @@ public class UserMsgService implements IUserMsgService {
     public int add(UserMsg userMsg) {
         return userMsgMapper.add(userMsg);
     }
+
+    @Override
+    public int addTask(long shopId, long employeeId, long petId, long userId, long userMsgId) {
+        return userMsgMapper.addTask(shopId, employeeId, petId, userId, userMsgId);
+    }
 }

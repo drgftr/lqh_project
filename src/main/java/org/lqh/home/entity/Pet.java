@@ -5,14 +5,17 @@ import lombok.Data;
 /**
  * @description: TODO 类描述
  * @author: 丁真
- * @date: 2023/11/12
+ * @date: 2023/11/13
  **/
 @Data
 public class Pet {
-    //id
-    private int id;
-    //类别
+    private long id;
     private String type;
-    //描述
     private String description;
+
+    public Pet(String type, String description){
+        this.type = type;
+        this.description = description;
+    }
 }
+

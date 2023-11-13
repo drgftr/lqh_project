@@ -62,9 +62,10 @@ public class LoginController {
 
     @PostMapping(value = "/login" ,produces = {"application/json", "application/xml"})
     public NetResult adminLogin(@RequestBody LoginParam loginParam){
-        String expiredV = redisService.getValue(loginParam.getPhone());
-        if (expiredV==null){
-            return ResultGenerator.genFailResult("验证码错误");
+        String expiredV = (String) redisTemplate.opsForValue().get(loginParam.getPhone());
+        String code = loginParam.getCode();
+        if (!code.equals(expiredV)){
+            return ResultGenerator.genFailResult("验证码错误/过期");
         }
         if (loginParam.getType() == 0){
             try {
@@ -93,12 +94,8 @@ public class LoginController {
         if(!RegexUtil.isMobileExact(phone)){
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,"手机号不合法");
         }
-        String expiredV = redisService.getValue(phone+phone);
+        String expiredV = (String) redisTemplate.opsForValue().get(phone);
 
-//        String e = new ArrayList(expiredV).get(0).toString();
-//        System.out.println(e);
-//        System.out.println(expiredV.toString());
-//        System.out.println(StringUtil.isNullOrNullStr(expiredV.toString()));
         if(StringUtil.isNullOrNullStr(expiredV)){
             return  ResultGenerator.genFailResult("验证码过期");
         }else {
@@ -112,7 +109,7 @@ public class LoginController {
 
     //注册
     @PostMapping("/register")
-    public NetResult register(RegisterParam registerParam){
+    public NetResult register(@RequestBody RegisterParam registerParam){
         System.out.println();
         try {
             NetResult netResult = userService.register(registerParam);
@@ -129,7 +126,8 @@ public class LoginController {
      * @throws Exception
      */
     @GetMapping("/getverifycode")
-    public NetResult sendCode(@RequestParam String phone) {
+    public NetResult sendCode(@RequestParam String phone) throws Exception {
+        //System.out.println(phone);
         /**
          * 检查手机号是否空
          */
@@ -142,9 +140,9 @@ public class LoginController {
         if (!RegexUtil.isMobileExact(phone)) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,"手机号格式不正确");
         }
-        String host = "https://dfsns.market.alicloudapi.com";
-        String path = "/data/send_sms";
-        String method = "GET";
+        String host = "https://dfsmsv2.market.alicloudapi.com";
+        String path = "/data/send_sms_v2";
+        String method = "POST";
         String appcode = "dd31c4a2f9014af5b66dd61889cfcfb0";
         Map<String, String> headers = new HashMap<String, String>();
         //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
@@ -155,32 +153,36 @@ public class LoginController {
         Map<String, String> bodys = new HashMap<String, String>();
         String code = RandomCode.getCode() ;
         bodys.put("content", "code:"+code);
-        bodys.put("template_id", "CST_ptdie100");
-        bodys.put("phone_number",phone);
-        //HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
-        try {
-            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
-            String result = EntityUtils.toString(response.getEntity());
-            return ResultGenerator.genSuccessResult(result);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-//        HttpEntity entity = response.getEntity();
-//        String result = null;
-//        if (entity != null) {
-//            try (InputStream inputStream = entity.getContent()) {
-//                result = convertStreamToString(inputStream);
-//                logger.info(result);
-//                // 将新的验证码存入缓存，设置过期时间为60秒
-//                redisTemplate.opsForValue().set(phone, code, 300, TimeUnit.SECONDS);
-//
-//                return ResultGenerator.genSuccessResult(Result.StringToJson(result));
-//            } catch (IOException e) {
-//                // 处理异常
-//                e.printStackTrace();
-//            }
+        bodys.put("template_id", "TPL_0000");
+        bodys.put("phone_number", phone);
+        //bodys.put("phone_number",phone);
+        HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+//        try {
+//            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
+//            //System.out.println(response);
+//            String result = EntityUtils.toString(response.getEntity());
+//            //System.out.println(result);
+//            redisTemplate.opsForValue().set(phone, code, 300, TimeUnit.SECONDS);
+//            return ResultGenerator.genSuccessResult(result);
+//        }catch (Exception e){
+//            e.printStackTrace();
 //        }
+
+        HttpEntity entity = response.getEntity();
+        String result = null;
+        if (entity != null) {
+            try (InputStream inputStream = entity.getContent()) {
+                result = convertStreamToString(inputStream);
+                logger.info(result);
+                // 将新的验证码存入缓存，设置过期时间为60秒
+                redisTemplate.opsForValue().set(phone, code, 300, TimeUnit.SECONDS);
+
+                return ResultGenerator.genSuccessResult(Result.StringToJson(result));
+            } catch (IOException e) {
+                // 处理异常
+                e.printStackTrace();
+            }
+        }
        return ResultGenerator.genFailResult("发送验证码失败");
 
     }
@@ -199,26 +201,4 @@ public class LoginController {
             return null;
         }
     }
-
-
-
-
-//    @PostMapping("/userlogin")
-//    public NetResult userLogin(@RequestBody LoginParam loginParam){
-//        System.out.println(loginParam);
-//        try {
-//            NetResult netResult = userService.login(loginParam);
-//            return netResult;
-//        }catch (Exception e){
-//            return ResultGenerator.genFailResult("未知异常"+e.getMessage());
-//        }
-//    }
-
-//    //发验证码的
-//    @GetMapping("/getverifycode")
-//    public NetResult sendVerifyCode(@RequestParam String phone){
-//        return userService.sendRegisterCode(phone);
-//
-//    }
-
 }

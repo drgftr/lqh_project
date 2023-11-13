@@ -52,4 +52,16 @@ public class ShopMapperTest {
     public void testDelete(){
         System.out.println(shopMapper.delete(33l));
     }
+
+    @Test
+    public void testFindByAddress(){
+        String s = "湖北省武汉市武昌区武汉大学";
+        System.out.println(shopMapper.findByAddress(s));
+    }
+
+    @Test
+    public void testFindById(){
+        System.out.println(shopMapper.findById(31));
+        System.out.println(shopMapper.findById(31).getAdmin_id());
+    }
 }

@@ -17,6 +17,8 @@ public class UserMsg {
     private long adminId;
     //店铺id
     private long shopId;
+
+    private long petId;
     //宠物name
     private String name;
     //地址
@@ -31,7 +33,11 @@ public class UserMsg {
     private int isinoculation;
     //性别
     private String sex;
-    //状态
+    //状态 0是上架了 1是没上架
     private int state;
-
+    //宠物种类
+    private Pet pet;
+    private Shop shop;
+    private Employee admin;
+    private Users users;
 }

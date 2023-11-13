@@ -9,7 +9,7 @@ import lombok.Data;
  **/
 @Data
 public class Shop {
-    private Long id;
+    private long id;
     private String name;
     private String tel;
     private Long registerTime;
@@ -17,5 +17,5 @@ public class Shop {
     private String address;
     private String logo;
     private Employee admin;
-    private Long adminId;
+    private long admin_id;
 }

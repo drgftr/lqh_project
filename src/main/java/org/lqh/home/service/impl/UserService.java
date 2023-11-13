@@ -5,6 +5,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.lqh.home.common.Constants;
+import org.lqh.home.entity.Employee;
 import org.lqh.home.entity.Users;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
@@ -99,7 +100,7 @@ public class UserService implements IUserService {
 
     @Override
     public NetResult adminLogin(LoginParam loginParam) {
-        System.out.println(loginParam);
+        //System.out.println(loginParam);
         //判断账号密码是不是空
         if (StringUtil.isEmpty(loginParam.getPhone())) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, "手机号不能为空");
@@ -126,7 +127,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public NetResult login(LoginParam loginParam) throws Exception {
+    public NetResult login(LoginParam loginParam) {
         /**
          * 检查手机号是否空
          */
@@ -139,61 +140,37 @@ public class UserService implements IUserService {
         if (!RegexUtil.isMobileExact(loginParam.getPhone())) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,"手机号格式不正确");
         }
-        String host = "https://dfsns.market.alicloudapi.com";
-        String path = "/data/send_sms";
-        String method = "GET";
-        String appcode = "dd31c4a2f9014af5b66dd61889cfcfb0";
-        Map<String, String> headers = new HashMap<String, String>();
-        //最后在header中的格式(中间是英文空格)为Authorization:APPCODE 83359fd73fe94948385f570e3c139105
-        headers.put("Authorization", "APPCODE " + appcode);
-        //根据API的要求，定义相对应的Content-Type
-        headers.put("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        Map<String, String> querys = new HashMap<String, String>();
-        Map<String, String> bodys = new HashMap<String, String>();
-        String code = RandomCode.getCode() ;
-        bodys.put("content", "code:"+code);
-        bodys.put("template_id", "CST_ptdie100");
-        bodys.put("phone_number", loginParam.getPhone());
-
-        try {
-            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
-            String result = EntityUtils.toString(response.getEntity());
-            return ResultGenerator.genSuccessResult(result);
-        }catch (Exception e){
-            e.printStackTrace();
+        loginParam.setPassword(MD5Util.MD5Encode(loginParam.getPassword(), "utf-8"));
+        Users users = iUsersService.getUser(loginParam.getPhone(),loginParam.getPassword());
+        if(users != null){
+            String token = UUID.randomUUID().toString();
+            users.setToken(token);
+            users.setPassword(null);
+            redisTemplate.opsForValue().set(token, users, 30, TimeUnit.MINUTES);
+            return ResultGenerator.genSuccessResult(users);
         }
-
-//        HttpEntity entity = response.getEntity();
-//        String result = null;
-//        if (entity != null) {
-//            try (InputStream inputStream = entity.getContent()) {
-//                result = convertStreamToString(inputStream);
-//                logger.info(result);
-//                // 将新的验证码存入缓存，设置过期时间为60秒
-//                redisTemplate.opsForValue().set(loginParam.getPhone(), code, 300, TimeUnit.SECONDS);
-//
-//                return ResultGenerator.genSuccessResult(Result.StringToJson(result));
-//            } catch (IOException e) {
-//                // 处理异常
-//                e.printStackTrace();
-//                return ResultGenerator.genFailResult("发送验证码失败");
-//            }
-//        }
-        return ResultGenerator.genFailResult("发送验证码失败");
+        return ResultGenerator.genFailResult("账号密码错误");
     }
 
     //注册
     @Override
     public NetResult  register(RegisterParam registerParam) {
+        //Users users = registerParam.getUsers();
+        String code = registerParam.getCode();
         //看看验证码过期没
-        String expiredV = redisService.getValue(registerParam.getPhone());
-        if (StringUtil.isNullOrNullStr(expiredV)){
-            return ResultGenerator.genFailResult("验证码过期");
+        String expiredV = (String) redisTemplate.opsForValue().get(registerParam.getPhone());
+//        System.out.println("----");
+        System.out.println(expiredV);
+        System.out.println(code);
+//        System.out.println("----");
+        if (!code.equals(expiredV)){
+            return ResultGenerator.genFailResult("验证码错误/过期");
         }
         //判断账号是不是空
         if (StringUtil.isEmpty(registerParam.getUsername())) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, "用户名不能为空");
         }
+
         //没密码给个123456
         if (StringUtil.isEmpty(registerParam.getPassword())) {
             registerParam.setPassword("123456");
@@ -205,6 +182,11 @@ public class UserService implements IUserService {
             return ResultGenerator.genErrorResult(NetCode.AGE_INVALID, "未成年不能注册");
         }
 
+        Users users1 = iUsersService.selectPhone(registerParam.getPhone());
+        if(users1!=null){
+            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,Constants.PHONE_OCCUPATION);
+        }
+
         //设置当前时间
         registerParam.setRegistertime(System.currentTimeMillis());
         try {
@@ -212,21 +194,6 @@ public class UserService implements IUserService {
             return ResultGenerator.genSuccessResult("注册成功");
         }catch (Exception e){
             return ResultGenerator.genFailResult("注册失败"+e.getMessage());
-        }
-    }
-
-    //处理流异常的状态
-    private String convertStreamToString(InputStream is) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            return sb.toString();
-        } catch (IOException e) {
-            // 处理异常
-            return null;
         }
     }
 }

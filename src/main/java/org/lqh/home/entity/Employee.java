@@ -15,7 +15,7 @@ import java.io.Serializable;
 @Setter
 @Data
 public class Employee implements Serializable {
-    public Long id;
+    public long id;
     //员工部门id
     private Long did;
     //员工名称

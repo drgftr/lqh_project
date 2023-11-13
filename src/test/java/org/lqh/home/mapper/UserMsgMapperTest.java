@@ -26,15 +26,16 @@ public class UserMsgMapperTest {
     @Test
     public void testAdd() throws UnsupportedEncodingException {
         UserMsg userMsg = new UserMsg();
-        userMsg.setAddress(Objects.requireNonNull(GaoDeMapUtil.getLngAndLag("湖北省武汉市亿达云山湖")).toString());
+        userMsg.setAddress(Objects.requireNonNull(GaoDeMapUtil.getLngAndLag("湖北省荆州市沙市区荆州吾悦广场")).getFormattedAddress());
         userMsg.setAdminId(316L);
         userMsg.setShopId(30L);
         userMsg.setName("小白");
-        userMsg.setPrice(200.12);
+        userMsg.setPetId(4L);
+        userMsg.setPrice(888.88);
         userMsg.setUserId(3L);
         userMsg.setBirth(System.currentTimeMillis());
-        userMsg.setIsinoculation(0);
-        userMsg.setSex("雄");
+        userMsg.setIsinoculation(1);
+        userMsg.setSex("雌");
         userMsg.setState(1);
         userMsg.setCreatetime(System.currentTimeMillis());
         userMsgMapper.add(userMsg);

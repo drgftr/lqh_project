@@ -26,4 +26,6 @@ public interface IShopService {
     int count();
 
     Shop findById(long id);
+
+    Shop findByAddress(String address);
 }

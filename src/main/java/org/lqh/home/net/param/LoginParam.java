@@ -12,6 +12,7 @@ public class LoginParam {
     private String phone;
     private String password;
     private String username;
+    private String code;
     //type 1管理员 type 0用户
     private int type;
 }
