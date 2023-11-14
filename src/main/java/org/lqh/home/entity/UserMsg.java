@@ -2,23 +2,25 @@ package org.lqh.home.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @description: TODO 类描述
  * @author: 丁真
  * @date: 2023/11/12
  **/
 @Data
-public class UserMsg {
+public class UserMsg implements Serializable {
     //id
     private long id;
     //用户id
-    private long userId;
+    private long user_id;
     //管理员id
-    private long adminId;
+    private long admin_id;
     //店铺id
-    private long shopId;
+    private long shop_id;
 
-    private long petId;
+    private long pet_id;
     //宠物name
     private String name;
     //地址
@@ -40,4 +42,6 @@ public class UserMsg {
     private Shop shop;
     private Employee admin;
     private Users users;
+    private String shopName;
+    private String masterName;
 }

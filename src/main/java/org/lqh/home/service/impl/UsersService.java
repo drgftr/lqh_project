@@ -33,11 +33,6 @@ public class UsersService implements IUsersService {
     }
 
     @Override
-    public Users getAdmin(String phone, String password) {
-        return usersMapper.getAdmin(phone, password);
-    }
-
-    @Override
     public Users selectPhone(String phone) {
         return usersMapper.selectPhone(phone);
     }

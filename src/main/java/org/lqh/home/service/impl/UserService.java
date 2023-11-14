@@ -103,26 +103,25 @@ public class UserService implements IUserService {
         //System.out.println(loginParam);
         //判断账号密码是不是空
         if (StringUtil.isEmpty(loginParam.getPhone())) {
-            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, "手机号不能为空");
+            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, Constants.PHONE_IS_NULL);
         }
         if (StringUtil.isEmpty(loginParam.getPassword())) {
-            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, "密码不能为空");
+            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, Constants.PASSWORD_IS_NULL);
         }
         //密码md5加密
         loginParam.setPassword(MD5Util.MD5Encode(loginParam.getPassword(), "utf-8"));
         //从数据库找这个人
-//        Employee employee = iEmployeeService.login(loginParam);
-        Users users = iUsersService.getAdmin(loginParam.getPhone(),loginParam.getPassword());
-        if (users != null) {
+        Employee employee = iEmployeeService.getAdmin(loginParam.getPhone(),loginParam.getPassword());
+        if (employee != null) {
             //如果有 加个token
             String token = UUID.randomUUID().toString();
-            users.setToken(token);
-            users.setPassword(null);
-            redisTemplate.opsForValue().set(token, users, 30, TimeUnit.MINUTES);
-//            logger.info("token__"+token);
-            return ResultGenerator.genSuccessResult(users);
+            employee.setToken(token);
+            employee.setPassword(null);
+            redisTemplate.opsForValue().set(token, employee, 30, TimeUnit.MINUTES);
+           //logger.info("token__"+token);
+            return ResultGenerator.genSuccessResult(employee);
         }
-        return ResultGenerator.genFailResult("你不是管理员");
+        return ResultGenerator.genFailResult(Constants.ADMIN_IS_NULL);
 
     }
 
@@ -138,7 +137,7 @@ public class UserService implements IUserService {
          * 检查手机号格式
          */
         if (!RegexUtil.isMobileExact(loginParam.getPhone())) {
-            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,"手机号格式不正确");
+            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,Constants.PHONE_ERROR);
         }
         loginParam.setPassword(MD5Util.MD5Encode(loginParam.getPassword(), "utf-8"));
         Users users = iUsersService.getUser(loginParam.getPhone(),loginParam.getPassword());
@@ -149,26 +148,26 @@ public class UserService implements IUserService {
             redisTemplate.opsForValue().set(token, users, 30, TimeUnit.MINUTES);
             return ResultGenerator.genSuccessResult(users);
         }
-        return ResultGenerator.genFailResult("账号密码错误");
+        return ResultGenerator.genErrorResult(NetCode.LOGIN_ERROR,Constants.LOGIN_ERROR);
     }
 
     //注册
     @Override
     public NetResult  register(RegisterParam registerParam) {
-        //Users users = registerParam.getUsers();
         String code = registerParam.getCode();
-        //看看验证码过期没
         String expiredV = (String) redisTemplate.opsForValue().get(registerParam.getPhone());
-//        System.out.println("----");
-        System.out.println(expiredV);
-        System.out.println(code);
-//        System.out.println("----");
-        if (!code.equals(expiredV)){
-            return ResultGenerator.genFailResult("验证码错误/过期");
+        //看看验证码过期没
+        if (StringUtil.isEmpty(expiredV)){
+            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_LAPSE);
         }
+        //验证码输入是否正确
+        if (!code.equals(expiredV)){
+            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_ERROR);
+        }
+
         //判断账号是不是空
         if (StringUtil.isEmpty(registerParam.getUsername())) {
-            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, "用户名不能为空");
+            return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, Constants.NAME_IS_NULL);
         }
 
         //没密码给个123456
@@ -179,7 +178,7 @@ public class UserService implements IUserService {
 
         //面向成人的产品，不让未成年注册
         if (registerParam.getAge()<18){
-            return ResultGenerator.genErrorResult(NetCode.AGE_INVALID, "未成年不能注册");
+            return ResultGenerator.genErrorResult(NetCode.AGE_INVALID, Constants.AGE_ERROR);
         }
 
         Users users1 = iUsersService.selectPhone(registerParam.getPhone());

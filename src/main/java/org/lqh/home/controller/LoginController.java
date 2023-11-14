@@ -7,6 +7,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 import org.lqh.home.common.Constants;
+import org.lqh.home.entity.Users;
 import org.lqh.home.interceptor.TokenInterceptor;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
@@ -25,6 +26,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 
@@ -64,8 +66,13 @@ public class LoginController {
     public NetResult adminLogin(@RequestBody LoginParam loginParam){
         String expiredV = (String) redisTemplate.opsForValue().get(loginParam.getPhone());
         String code = loginParam.getCode();
+        //验证码过期没
+        if (StringUtil.isEmpty(expiredV)){
+            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_LAPSE);
+        }
+        //验证码是否正确
         if (!code.equals(expiredV)){
-            return ResultGenerator.genFailResult("验证码错误/过期");
+            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_ERROR);
         }
         if (loginParam.getType() == 0){
             try {
@@ -84,6 +91,14 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/test")
+    public NetResult test(HttpServletRequest request){
+        Users user = (Users) redisTemplate.opsForValue().get(request.getHeader("token"));
+        System.out.println("---------");
+        System.out.println(user);
+        return ResultGenerator.genSuccessResult(user);
+    }
+
 
     //验证
     @GetMapping("/verifycode")
@@ -97,12 +112,12 @@ public class LoginController {
         String expiredV = (String) redisTemplate.opsForValue().get(phone);
 
         if(StringUtil.isNullOrNullStr(expiredV)){
-            return  ResultGenerator.genFailResult("验证码过期");
+            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_LAPSE);
         }else {
             if (expiredV.equals(code)){
                 return  ResultGenerator.genSuccessResult("验证码正常");
             }else {
-                return ResultGenerator.genFailResult("验证码不存在");
+                return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_ERROR);
             }
         }
     }
@@ -110,7 +125,6 @@ public class LoginController {
     //注册
     @PostMapping("/register")
     public NetResult register(@RequestBody RegisterParam registerParam){
-        System.out.println();
         try {
             NetResult netResult = userService.register(registerParam);
             return netResult;
@@ -157,16 +171,6 @@ public class LoginController {
         bodys.put("phone_number", phone);
         //bodys.put("phone_number",phone);
         HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
-//        try {
-//            HttpResponse response = HttpUtils.doPost(host, path, method, headers, querys, bodys);
-//            //System.out.println(response);
-//            String result = EntityUtils.toString(response.getEntity());
-//            //System.out.println(result);
-//            redisTemplate.opsForValue().set(phone, code, 300, TimeUnit.SECONDS);
-//            return ResultGenerator.genSuccessResult(result);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
 
         HttpEntity entity = response.getEntity();
         String result = null;

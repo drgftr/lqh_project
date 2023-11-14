@@ -15,4 +15,5 @@ public class LoginParam {
     private String code;
     //type 1管理员 type 0用户
     private int type;
+    private String token;
 }

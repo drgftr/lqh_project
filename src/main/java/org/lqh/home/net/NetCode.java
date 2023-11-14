@@ -98,4 +98,40 @@ public class NetCode {
      * 没有这个id
      */
     public static final int ADMINID_INVALID = 0x30;
+    /**
+     * 验证码错误
+     */
+    public static final int CODE_ERROR = 0x31;
+    /**
+     * 账号密码错误
+     */
+    public static final int LOGIN_ERROR = 0x32;
+    /**
+     * 提交的宠物列表状态错误
+     */
+    public static final int PET_TYPE_ERROR = 0X33;
+    /**
+     * 用户没有发布任务
+     */
+    public static final int USER_LIST_IS_NULL = 0x34;
+    /**
+     * 添加数据库错误
+     */
+    public static final int RESULT_ERROR = 0X35;
+    /**
+     * 用户消息列表中没有这个宠物信息
+     */
+    public static final int LIST_IS_NULL = 0x36;
+    /**
+     * 钱不能<0
+     */
+    public static final int MONEY_ERROR = 0x37;
+    /**
+     * 修改数据库失败
+     */
+    public static final int LISTING_ERROR = 0x38;
+    /**
+     * 店铺还没上架宠物
+     */
+    public static final int SHOP_IS_NULL = 0X39;
 }

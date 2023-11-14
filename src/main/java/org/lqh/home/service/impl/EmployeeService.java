@@ -80,5 +80,10 @@ public class EmployeeService implements IEmployeeService {
         return employeeMapper.select(phone, password);
     }
 
+    @Override
+    public Employee getAdmin(String phone, String password) {
+        return employeeMapper.getAdmin(phone, password);
+    }
+
 
 }

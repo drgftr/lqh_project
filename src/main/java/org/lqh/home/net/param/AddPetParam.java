@@ -9,5 +9,4 @@ import org.lqh.home.entity.UserMsg;
  **/
 public class AddPetParam {
     public UserMsg userMsg;
-    public int user_id;
 }

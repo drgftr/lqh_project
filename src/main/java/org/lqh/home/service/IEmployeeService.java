@@ -28,4 +28,6 @@ public interface IEmployeeService {
     Employee login(LoginParam loginParam);
 
     Employee select(String phone, String password);
+
+    Employee getAdmin(String phone, String password);
 }

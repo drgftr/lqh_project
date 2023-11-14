@@ -15,8 +15,6 @@ public interface IUsersService {
 
     Users getUser(@Param("phone") String phone, @Param("password") String password);
 
-    Users getAdmin(String phone, String password);
-
     Users selectPhone(String phone);
 
     Users findById(long id);

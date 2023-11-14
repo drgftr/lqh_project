@@ -25,5 +25,6 @@ public class Url {
     public static final String SHOP_DELETE_URL = "/shop/delete";
     public static final String SHOP_UPDATE_URL = "/shop/edit";
     public static final String SHOP_PAGINATION_URL = "/shop/paginationList";
+    public static final String USER_FINDPETMASTER_URL = "/user/publish";
 
 }

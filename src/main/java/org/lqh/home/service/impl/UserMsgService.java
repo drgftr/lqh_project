@@ -6,6 +6,8 @@ import org.lqh.home.service.IUserMsgService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @description: TODO 类描述
  * @author: 丁真
@@ -26,7 +28,37 @@ public class UserMsgService implements IUserMsgService {
     }
 
     @Override
-    public int addTask(long shopId, long employeeId, long petId, long userId, long userMsgId) {
-        return userMsgMapper.addTask(shopId, employeeId, petId, userId, userMsgId);
+    public int addTask(long shopId, long employeeId, long petId, long user_id, long userMsgId) {
+        return userMsgMapper.addTask(shopId, employeeId, petId, user_id, userMsgId);
+    }
+
+    @Override
+    public List<UserMsg> getPetListByState(int state) {
+        return userMsgMapper.getPetListByState(state);
+    }
+
+    @Override
+    public List<UserMsg> getUserList(long userId) {
+        return userMsgMapper.getUserList(userId);
+    }
+
+    @Override
+    public List<Long> getAllId() {
+        return userMsgMapper.getAllId();
+    }
+
+    @Override
+    public int listings(double price, long id) {
+        return userMsgMapper.listings(price, id);
+    }
+
+    @Override
+    public List<UserMsg> getShopList(long shopId) {
+        return userMsgMapper.getShopList(shopId);
+    }
+
+    @Override
+    public List<Long> getAllShopId() {
+        return userMsgMapper.getAllShopId();
     }
 }
