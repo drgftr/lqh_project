@@ -18,15 +18,17 @@ public interface IUserMsgService {
     int addTask(@Param("shopId") long shopId, @Param("employeeId")long employeeId,
                 @Param("petId")long petId, @Param("userId")long user_id, @Param("userMsgId")long userMsgId);
 
-    List<UserMsg> getPetListByState(int state);
+    List<UserMsg> getPetListByState(@Param("state") int state,@Param("shopId") long adminId);
 
     List<UserMsg> getUserList(long userId);
 
     List<Long> getAllId();
 
-    int listings(@Param("price") double price, @Param("id") long id);
+    int listings(long id);
 
     List<UserMsg> getShopList(long shopId);
 
     List<Long> getAllShopId();
+
+    UserMsg findById(long id);
 }

@@ -43,5 +43,6 @@ public interface ShopMapper {
     @Select("select * from t_shop where address=#{address}")
     Shop findByAddress(String address);
 
-    //List<Shop> getAllShop();
+    @Select("select id from t_shop")
+    List<Long> getAllShop();
 }

@@ -29,7 +29,14 @@ public class Constants {
     public static final String LIST_IS_NULL = "暂无此数据";
     public static final String RESULE_ERROR = "添加数据库错误";
     public static final String MONEY_ERROR = "价格不能小于0";
-    public static final String LISTING_SUCCESS = "修改成功";
-    public static final String LISTING_ERROR = "修改失败";
-    public static final String SHOP_IS_NULL = "这个店铺还没上架宝贝哦";
+    public static final String LISTING_SUCCESS = "上架成功";
+    public static final String LISTING_ERROR = "上架失败";
+    public static final String SHOP_IS_NULL = "暂无改店铺信息";
+    public static final String SHOPPET_IS_NULL = "这个店铺还没上架宝贝哦";
+    public static final String PETSHOP_ADD_ERROR = "上架宠物失败";
+    public static final String PETSTATE_ERROR = "宠物不能重复上架";
+    public static final String PETSHOP_ERROR = "这个宝贝不存在";
+    public static final String PETSHOP_IS_BUY = "宠物已经被买走了";
+    public static final String BUY_ERROR = "购买失败";
+    public static final String BUY_SUCCESS = "购买成功";
 }

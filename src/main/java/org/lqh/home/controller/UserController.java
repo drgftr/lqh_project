@@ -40,15 +40,19 @@ public class UserController {
 
     private RedisTemplate redisTemplate;
 
+    private IPetShopService iPetShopService;
+
     @Autowired
     public UserController (IUserMsgService iUserMsgService,IEmployeeService iEmployeeService,IShopService iShopService
-            ,IUsersService iUsersService,IPetService iPetService,RedisTemplate redisTemplate){
+            ,IUsersService iUsersService,IPetService iPetService,RedisTemplate redisTemplate
+            ,IPetShopService iPetShopService){
         this.iUserMsgService = iUserMsgService;
         this.iEmployeeService = iEmployeeService;
         this.iShopService = iShopService;
         this.iUsersService = iUsersService;
         this.iPetService = iPetService;
         this.redisTemplate = redisTemplate;
+        this.iPetShopService = iPetShopService;
     }
 
     @PostMapping("/publish")
@@ -83,14 +87,22 @@ public class UserController {
             return ResultGenerator.genErrorResult(NetCode.SEX_INVALID, Constants.SEX_ERROR);
         }
 
+        if (!userMsg.getSex().equals("雄")&&!userMsg.getSex().equals("雌")){
+            return ResultGenerator.genErrorResult(NetCode.SEX_INVALID, Constants.SEX_ERROR);
+        }
+
+        //判断接种信息
         if (userMsg.getIsinoculation()!=0&&userMsg.getIsinoculation()!=1){
             return ResultGenerator.genErrorResult(NetCode.ISINOCULATION_INVALID, Constants.INOCULATION_ERROR);
         }
+
 
         if (userMsg.getBirth()<0){
             return  ResultGenerator.genErrorResult(NetCode.BIRTH_INVALID, Constants.BIRTH_ERROR);
         }
 
+
+        //获取所有店铺
         List<Shop> shopList = iShopService.list();
         List<Location> locations = new ArrayList<>();
 
@@ -119,6 +131,7 @@ public class UserController {
             //Users users = iUsersService.findById(user_id);
             userMsg.setUsers(user);
 
+            //把信息添加到数据库
             int result = iUserMsgService.add(userMsg);
             if (result!=1){
                 return ResultGenerator.genFailResult("添加失败");
@@ -128,6 +141,7 @@ public class UserController {
 //            System.out.println(pet.getId());
 //            System.out.println(user.getId());
 //            System.out.println(userMsg.getId());
+            //把店铺id 管理员id 宠物类别id 寻主人的id加到数据库
             int result1 = iUserMsgService.addTask(shop.getId(),admin.getId(),pet.getId(),user.getId(),userMsg.getId());
             if (result1!=1){
                 return ResultGenerator.genErrorResult(NetCode.RESULT_ERROR,Constants.RESULE_ERROR);
@@ -139,7 +153,7 @@ public class UserController {
         return ResultGenerator.genFailResult("添加失败");
     }
 
-    //店铺处理
+    //店铺处理宠物并上架
     @PostMapping("/dispose")
     public NetResult DisposePet(double price,long id,HttpServletRequest request){
         String token = request.getHeader("token");
@@ -153,23 +167,113 @@ public class UserController {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID,Constants.INVALID_TOKEN);
         }
 
-        List<Long> allId = iUserMsgService.getAllId();
-        //判断有没有这个宠物信息
-        if(!allId.contains(id)){
+//        //获取所有的id
+//        List<Long> allId = iUserMsgService.getAllId();
+//        //判断有没有这个宠物信息
+//        if(!allId.contains(id)){
+//            return ResultGenerator.genErrorResult(NetCode.LIST_IS_NULL,Constants.LIST_IS_NULL);
+//        }
+        //根据id找寻主信息
+        UserMsg userMsg = iUserMsgService.findById(id);
+        //判断数据库有无这个信息
+        if (userMsg==null){
             return ResultGenerator.genErrorResult(NetCode.LIST_IS_NULL,Constants.LIST_IS_NULL);
         }
-
+        //判断宠物上架没 如果已经上架 就不能继续上架
+        if (userMsg.getState()==1){
+            return ResultGenerator.genErrorResult(NetCode.PETSTATE_ERROR,Constants.PETSTATE_ERROR);
+        }
         //判断价格 不能小于0 ，不知道要不要
         if (price<0){
             return ResultGenerator.genErrorResult(NetCode.MONEY_ERROR,Constants.MONEY_ERROR);
         }
 
-        int result = iUserMsgService.listings(price, id);
-        if (result!=0){
-            return  ResultGenerator.genSuccessResult(Constants.LISTING_SUCCESS);
+        //处理宠物 把他的状态改成1
+        int result = iUserMsgService.listings(id);
+        if (result==0){
+            return  ResultGenerator.genSuccessResult(Constants.LISTING_ERROR);
         }
-        return ResultGenerator.genErrorResult(NetCode.LISTING_ERROR,Constants.LISTING_ERROR);
+
+        //获取参数的
+        PetShop petShop = getPetShop(userMsg,price);
+
+        //上架宠物
+        int result1 = iPetShopService.add(petShop);
+        if (result1==0){
+            return ResultGenerator.genErrorResult(NetCode.PETSHOP_ADD_ERROR,Constants.PETSHOP_ADD_ERROR);
+        }
+        return ResultGenerator.genSuccessResult(Constants.LISTING_SUCCESS);
     }
+
+    //修改宠物价格
+//    @PostMapping("/revise")
+//    public NetResult RevisePetPrice(double price,long id,HttpServletRequest request){
+//        String token = request.getHeader("token");
+//        //判断token有没有
+//        if (StringUtil.isEmpty(token)){
+//            return ResultGenerator.genErrorResult(NetCode.TOKEN_NOT_EXIST, Constants.TOKEN_IS_NULL);
+//        }
+//        Employee employee = (Employee) redisTemplate.opsForValue().get(token);
+//        //判断token过期没
+//        if (employee==null){
+//            return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID,Constants.INVALID_TOKEN);
+//        }
+//        //判断价格 不能小于0 ，不知道要不要
+//        if (price<0){
+//            return ResultGenerator.genErrorResult(NetCode.MONEY_ERROR,Constants.MONEY_ERROR);
+//        }
+//
+//        return null;
+//    }
+
+    //买宠物
+    @PostMapping("/buy")
+    public NetResult BuyPet(long id,HttpServletRequest request){
+        String token = request.getHeader("token");
+        //判断token有没有
+        if (StringUtil.isEmpty(token)){
+            return ResultGenerator.genErrorResult(NetCode.TOKEN_NOT_EXIST, Constants.TOKEN_IS_NULL);
+        }
+        Users user = (Users) redisTemplate.opsForValue().get(token);
+        //判断token过期没
+        if (user==null){
+            return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID,Constants.INVALID_TOKEN);
+        }
+
+        //在数据库找这个宠物信息
+        PetShop petShop = iPetShopService.getPetById(id);
+        //判断有无这个宠物信息
+        if (petShop == null){
+            return ResultGenerator.genErrorResult(NetCode.PETSHOP_ERROR,Constants.PETSHOP_ERROR);
+        }
+
+        //判断宠物被买走没
+        if (petShop.getState()==1){
+            return ResultGenerator.genErrorResult(NetCode.PETSHOP_IS_BUY,Constants.PETSHOP_IS_BUY);
+        }
+
+        //判断结果
+        int result = iPetShopService.buy(id,user.getId());
+
+        if (result==0){
+            return ResultGenerator.genErrorResult(NetCode.BUY_ERROR,Constants.BUY_ERROR);
+        }
+        return ResultGenerator.genSuccessResult(Constants.BUY_SUCCESS);
+    }
+
+    //设置参数用的
+    public PetShop getPetShop(UserMsg userMsg,double sellPrice){
+        PetShop petShop = new PetShop();
+        petShop.setShop_id(userMsg.getShop_id());
+        petShop.setSellTime(System.currentTimeMillis());
+        petShop.setUsermsg_id(userMsg.getId());
+        petShop.setName(userMsg.getName());
+        petShop.setAdmin_id(userMsg.getAdmin_id());
+        petShop.setCostPrice(userMsg.getPrice());
+        petShop.setSellPrice(sellPrice);
+        return petShop;
+    }
+
     //寻主列表（商铺后台的） state 0是未处理的 1是已处理的
     @GetMapping("/pettype")
     public NetResult PetList(int state,HttpServletRequest request){
@@ -185,10 +289,13 @@ public class UserController {
         }
         // 0是未处理的
         if (state == 0){
-            List<UserMsg> list = iUserMsgService.getPetListByState(state);
+            //在数据库找到未处理的数据 根据管理员id和state
+            List<UserMsg> list = iUserMsgService.getPetListByState(state,employee.getId());
+            System.out.println(list);
             try {
                 //设置宠物信息 商店名 主人名
                 for (UserMsg userMsg : list) {
+                    //System.out.println(userMsg);
                     userMsg.setPet(iPetService.findById(userMsg.getPet_id()));
                     userMsg.setMasterName(iUsersService.findById(userMsg.getUser_id()).getUsername());
                     userMsg.setShopName(iShopService.findById(userMsg.getShop_id()).getName());
@@ -198,7 +305,8 @@ public class UserController {
             }
             return ResultGenerator.genSuccessResult(list);
         }else if (state == 1){
-            List<UserMsg> list = iUserMsgService.getPetListByState(state);
+            //在数据库找到未处理的数据 根据管理员id和state
+            List<UserMsg> list = iUserMsgService.getPetListByState(state,employee.getId());
             try {
                 //设置宠物信息 商店名 主人名
                 for (UserMsg userMsg : list) {
@@ -215,6 +323,7 @@ public class UserController {
         }
     }
 
+    //用户查询自己发布的寻主
     @GetMapping("/userlist")
     public NetResult UserList( HttpServletRequest request){
         String token = request.getHeader("token");
@@ -229,6 +338,7 @@ public class UserController {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
         }
 
+        //根据用户id查询自己发布的消息 如果没有消息会进入catch 返回信息
         List<UserMsg> list = iUserMsgService.getUserList(user.getId());
         try {
             //设置宠物信息 商店名 主人名
@@ -258,11 +368,13 @@ public class UserController {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
         }
 
+        //找到所有店铺
         List<Shop> list = iShopService.list();
 
         return  ResultGenerator.genSuccessResult(list);
     }
 
+    //店铺宠物列表
     @GetMapping("/shoppetlist")
     public NetResult ShopPetList(long shopId,HttpServletRequest request){
         String token = request.getHeader("token");
@@ -277,17 +389,29 @@ public class UserController {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
         }
 
-        List<Long> allUserMsgShop = iUserMsgService.getAllShopId();
-        //去重
+        //判断有无这个店铺
+        Shop shop = iShopService.findById(shopId);
+        if (shop==null){
+            return ResultGenerator.genErrorResult(NetCode.SHOP_IS_NULL,Constants.SHOP_IS_NULL);
+        }
+
+        //获取上架宠物的店铺id
+        List<Long> allUserMsgShop = iPetShopService.getAllShopId();
+        //去重 网上找的
         List<Long> newList = allUserMsgShop.stream().distinct().collect(Collectors.toList());
         allUserMsgShop.clear();
         allUserMsgShop.addAll(newList);
+
         //判断 店铺有无上架宠物
         if(!allUserMsgShop.contains(shopId)){
-            return ResultGenerator.genErrorResult(NetCode.SHOP_IS_NULL,Constants.SHOP_IS_NULL);
+            return ResultGenerator.genErrorResult(NetCode.SHOP_IS_NULL,Constants.SHOPPET_IS_NULL);
         }
-        List<UserMsg> shopList = iUserMsgService.getShopList(shopId);
-        return ResultGenerator.genSuccessResult();
+        List<PetShop> shopList = iPetShopService.getShopList(shopId);
+        //把成本价设置成0 不能给用户看
+        for (PetShop petShop  : shopList){
+            petShop.setCostPrice(0);
+        }
+        return ResultGenerator.genSuccessResult(shopList);
     }
 
 }

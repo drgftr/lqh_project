@@ -27,7 +27,7 @@ public class MapTest {
         try {
             Location addressInfo = GaoDeMapUtil.getLngAndLag("湖北省武汉市武汉大学");
             Location location = GaoDeMapUtil.getLngAndLag("湖北省荆州市吾悦广场");
-            Location location1= GaoDeMapUtil.getLngAndLag("湖北省武汉市光谷广场");
+            Location location1= GaoDeMapUtil.getLngAndLag("北京市北京大学");
             Location location2 = GaoDeMapUtil.getLngAndLag("湖北省武汉市洪山区亿达云山湖");
             System.out.println(location2);
             System.out.println(location);

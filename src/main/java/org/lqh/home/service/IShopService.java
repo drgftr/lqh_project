@@ -28,4 +28,6 @@ public interface IShopService {
     Shop findById(long id);
 
     Shop findByAddress(String address);
+
+    List<Long> getAllShop();
 }

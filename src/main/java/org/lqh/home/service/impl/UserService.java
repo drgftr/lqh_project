@@ -139,6 +139,7 @@ public class UserService implements IUserService {
         if (!RegexUtil.isMobileExact(loginParam.getPhone())) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,Constants.PHONE_ERROR);
         }
+
         loginParam.setPassword(MD5Util.MD5Encode(loginParam.getPassword(), "utf-8"));
         Users users = iUsersService.getUser(loginParam.getPhone(),loginParam.getPassword());
         if(users != null){

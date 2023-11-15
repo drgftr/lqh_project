@@ -33,8 +33,8 @@ public class UserMsgService implements IUserMsgService {
     }
 
     @Override
-    public List<UserMsg> getPetListByState(int state) {
-        return userMsgMapper.getPetListByState(state);
+    public List<UserMsg> getPetListByState(int state,long adminId) {
+        return userMsgMapper.getPetListByState(state,adminId);
     }
 
     @Override
@@ -48,8 +48,8 @@ public class UserMsgService implements IUserMsgService {
     }
 
     @Override
-    public int listings(double price, long id) {
-        return userMsgMapper.listings(price, id);
+    public int listings(long id) {
+        return userMsgMapper.listings(id);
     }
 
     @Override
@@ -60,5 +60,10 @@ public class UserMsgService implements IUserMsgService {
     @Override
     public List<Long> getAllShopId() {
         return userMsgMapper.getAllShopId();
+    }
+
+    @Override
+    public UserMsg findById(long id) {
+        return userMsgMapper.findById(id);
     }
 }

@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -69,6 +70,17 @@ public class TokenInterceptor implements HandlerInterceptor {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(netResult);
         writer.write(json);
+        writer.flush();
         writer.close();
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        //在处理器处理请求完成后，返回ModelAndView之前执行。
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        //在DispatchServlet完全处理完请求后执行
     }
 }

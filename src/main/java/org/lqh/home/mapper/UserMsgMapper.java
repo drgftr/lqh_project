@@ -26,8 +26,8 @@ public interface UserMsgMapper {
     int addTask(@Param("shopId") long shopId, @Param("employeeId")long employeeId,
                 @Param("petId")long petId, @Param("user_id")long user_id, @Param("userMsgId")long userMsgId);
 
-    @Select("select * from user_msg where state=#{state}")
-    List<UserMsg> getPetListByState(int state);
+    @Select("select * from user_msg where state=#{state} and admin_id=#{adminId}")
+    List<UserMsg> getPetListByState(@Param("state") int state,@Param("adminId") long adminId);
 
     @Select("select * from user_msg where user_id=#{userId}")
     List<UserMsg> getUserList(long userId);
@@ -35,12 +35,15 @@ public interface UserMsgMapper {
     @Select("select id from user_msg")
     List<Long> getAllId();
 
-    @Update("update user_msg set price=#{price} where id=#{id}")
-    int listings(@Param("price") double price, @Param("id") long id);
+    @Update("update user_msg set state=1 where id=#{id}")
+    int listings(long id);
 
     @Select("select * from user_msg where shop_id=#{shopId}")
     List<UserMsg> getShopList(long shopId);
 
     @Select("select shop_id from user_msg")
     List<Long> getAllShopId();
+
+    @Select("select * from user_msg where id=#{id}")
+    UserMsg findById(long id);
 }

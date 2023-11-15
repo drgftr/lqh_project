@@ -67,4 +67,9 @@ public class ShopService implements IShopService {
     public Shop findByAddress(String address) {
         return shopMapper.findByAddress(address);
     }
+
+    @Override
+    public List<Long> getAllShop() {
+        return shopMapper.getAllShop();
+    }
 }

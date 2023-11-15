@@ -31,11 +31,11 @@ public class TokenConfig implements WebMvcConfigurer {
         registration.excludePathPatterns(   //添加不拦截路径
                 "/test",
                 "/user/publish",
+                "/getverifycode",
                 "/login",                   //登录
                 "/**/*.html",               //html静态资源
                 "/**/*.js",                  //js静态资源
                 "/**/*.css",                 //css静态资源
-                "/getverifycode",
                 "/register",
                 "/adminlogin",
                 "/userlogin"

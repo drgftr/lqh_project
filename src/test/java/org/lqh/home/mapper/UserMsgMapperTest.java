@@ -45,9 +45,9 @@ public class UserMsgMapperTest {
 
     @Test
     public void testGetPetListByState(){
-        System.out.println(userMsgMapper.getPetListByState(1));
+        System.out.println(userMsgMapper.getPetListByState(1,323));
         System.out.println("----");
-        System.out.println(userMsgMapper.getPetListByState(0));
+        System.out.println(userMsgMapper.getPetListByState(0,323));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class UserMsgMapperTest {
 
     @Test
     public void testListings(){
-        userMsgMapper.listings(777.77,5);
+        userMsgMapper.listings(10);
     }
 
     @Test

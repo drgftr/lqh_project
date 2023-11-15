@@ -134,4 +134,24 @@ public class NetCode {
      * 店铺还没上架宠物
      */
     public static final int SHOP_IS_NULL = 0X39;
+    /**
+     * 店铺上架宠物失败
+     */
+    public static final int PETSHOP_ADD_ERROR = 0x40;
+    /**
+     * 已上架的宠物不能再次上架
+     */
+    public static final int PETSTATE_ERROR = 0x41;
+    /**
+     * 宠物商店没有这个宠物信息
+     */
+    public static final int PETSHOP_ERROR = 0x42;
+    /**
+     * 宠物已经被买走了
+     */
+    public static final int PETSHOP_IS_BUY = 0x43;
+    /**
+     * 购买失败
+     */
+    public static final int BUY_ERROR = 0x44;
 }
