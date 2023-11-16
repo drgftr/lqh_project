@@ -31,7 +31,7 @@ public class Constants {
     public static final String MONEY_ERROR = "价格不能小于0";
     public static final String LISTING_SUCCESS = "上架成功";
     public static final String LISTING_ERROR = "上架失败";
-    public static final String SHOP_IS_NULL = "暂无改店铺信息";
+    public static final String SHOP_IS_NULL = "暂无该店铺信息";
     public static final String SHOPPET_IS_NULL = "这个店铺还没上架宝贝哦";
     public static final String PETSHOP_ADD_ERROR = "上架宠物失败";
     public static final String PETSTATE_ERROR = "宠物不能重复上架";
@@ -40,4 +40,9 @@ public class Constants {
     public static final String BUY_ERROR = "购买失败";
     public static final String BUY_SUCCESS = "购买成功";
     public static final String TYPE_ERROR = "未知的登录请求";
+    public static final String STATE_ERROR = "非法数据";
+    public static final String ADD_ERROR = "添加失败";
+    public static final String ADD_SUCCESS = "添加成功";
+    public static final String SHOP_ERROR = "附近暂无店铺";
+    public static final String ADDRESS_ERROR = "非法地址";
 }

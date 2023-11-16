@@ -2,10 +2,8 @@ package org.lqh.home.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.lqh.home.entity.Employee;
-import org.lqh.home.entity.Users;
 import org.lqh.home.net.param.LoginParam;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

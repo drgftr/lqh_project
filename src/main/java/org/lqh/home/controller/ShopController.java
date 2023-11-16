@@ -1,16 +1,20 @@
 package org.lqh.home.controller;
 
 import io.swagger.annotations.Api;
+import org.lqh.home.common.Constants;
 import org.lqh.home.entity.Employee;
+import org.lqh.home.entity.Location;
 import org.lqh.home.entity.Shop;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
 import org.lqh.home.service.IShopService;
+import org.lqh.home.utils.GaoDeMapUtil;
 import org.lqh.home.utils.ResultGenerator;
 import org.lqh.home.utils.ShopUtil;
 import org.lqh.home.utils.StringUtil;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -44,6 +48,13 @@ public class ShopController {
             return ResultGenerator.genErrorResult(NetCode.ADDRESS_NAME_INVALID, "logo不能空");
         }
 
+        try {
+            Location userLocation = GaoDeMapUtil.getLngAndLag(shop.getAddress());
+            shop.setLocation(userLocation);
+        } catch (UnsupportedEncodingException e) {
+            return ResultGenerator.genErrorResult(NetCode.ADDRESS_INVALID, Constants.ADDRESS_ERROR);
+        }
+
         shop.setRegisterTime(System.currentTimeMillis());
         if (shop.getAdmin() == null) {
             Employee employee = new Employee();
@@ -66,8 +77,8 @@ public class ShopController {
 
     @PostMapping("/out")
     public NetResult out(@RequestBody Shop shop) {
-        System.out.println("----------");
-        System.out.println(shop.getId());
+//        System.out.println("----------");
+//        System.out.println(shop.getId());
         try {
             iShopService.updateAdminId(shop.getId());
             return ResultGenerator.genSuccessResult("ok");
@@ -80,8 +91,8 @@ public class ShopController {
     @PostMapping("/delete")
     public NetResult delete(Long id) {
 
-        System.out.println("---------");
-        System.out.println(id);
+//        System.out.println("---------");
+//        System.out.println(id);
         int result = iShopService.delete(id);
         if (result == 1) {
             return ResultGenerator.genSuccessResult(id + "删除成功");
@@ -91,8 +102,8 @@ public class ShopController {
 
     @PostMapping("/edit")
     public NetResult edit(@RequestBody Shop shop) {
-        System.out.println("---------");
-        System.out.println(shop);
+//        System.out.println("---------");
+//        System.out.println(shop);
         try {
             iShopService.update(shop);
             return ResultGenerator.genSuccessResult("修改成功");

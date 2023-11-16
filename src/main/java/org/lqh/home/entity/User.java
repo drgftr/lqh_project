@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @date: 2023/11/9
  **/
 @Data
-public class Users implements Serializable {
+public class User implements Serializable {
     //用户id
     private Long id;
     //用户名

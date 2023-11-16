@@ -33,7 +33,7 @@ public class DepartmentController {
     @ApiOperation("添加部门")
     @PostMapping("/add")
     public NetResult add(@RequestBody  DepartmentParam departmentParam){
-        System.out.println("--------------"+departmentParam);
+        //System.out.println("--------------"+departmentParam);
         try {
             Department department = new Department();
             department.setSn(departmentParam.getSn());
@@ -47,7 +47,6 @@ public class DepartmentController {
             iDepartmentService.add(department);
             return ResultGenerator.genSuccessResult(department);
         }catch (Exception e){
-            e.printStackTrace();
             return ResultGenerator.genErrorResult(NetCode.CREATE_DEPARTMENT_ERROR,"保存部门失败！"+e.getMessage());
         }
     }

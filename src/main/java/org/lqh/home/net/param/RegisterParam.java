@@ -1,7 +1,6 @@
 package org.lqh.home.net.param;
 
 import lombok.Data;
-import org.lqh.home.entity.Users;
 
 import java.io.Serializable;
 
@@ -12,7 +11,7 @@ import java.io.Serializable;
  **/
 @Data
 public class RegisterParam implements Serializable {
-    //private Users users;
+    //private User users;
     private String code;
     private String username;
     private String phone;

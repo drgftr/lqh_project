@@ -2,8 +2,6 @@ package org.lqh.home.mapper;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.lqh.home.entity.Users;
-import org.lqh.home.utils.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,11 +16,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class UserMapperTest {
 
     @Autowired
-    private UsersMapper userMapper;
+    private UserMapper userMapper;
 
     @Test
     public void testAdd(){
-//        Users user = new Users();
+//        User user = new User();
 //        user.setUsername("丁真1");
 //        user.setAge(11);
 //        user.setPassword(MD5Util.MD5Encode("123456","utf-8"));
@@ -35,7 +33,7 @@ public class UserMapperTest {
     @Test
     public void testSelect(){
 //        String name = "admin";
-//        Users users = new Users();
+//        User users = new User();
 //        users.setUsername("admin");
 //        System.out.println(userMapper.getUser("admin",MD5Util.MD5Encode("123456","utf-8")));
 //        System.out.println(userMapper.getAdmin("admin","123456"));

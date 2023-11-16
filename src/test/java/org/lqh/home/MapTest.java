@@ -5,14 +5,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.lqh.home.entity.Location;
-import org.lqh.home.entity.Users;
+import org.lqh.home.entity.User;
 import org.lqh.home.net.param.RegisterParam;
 import org.lqh.home.utils.GaoDeMapUtil;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.UnsupportedEncodingException;
-import java.util.Objects;
 
 /**
  * @description: TODO 类描述
@@ -41,7 +40,7 @@ public class MapTest {
     @Test
     public void test11(){
         RegisterParam registerParam = new RegisterParam();
-        Users users = new Users();
+        User users = new User();
         String code ="123456";
         users.setUsername("王成亮");
         users.setPassword("123456");

@@ -4,11 +4,9 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.lqh.home.entity.Users;
+import org.lqh.home.entity.User;
 import org.lqh.home.net.param.RegisterParam;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * @description: TODO 类描述
@@ -17,17 +15,17 @@ import java.util.List;
  **/
 @Mapper
 @Repository
-public interface UsersMapper {
+public interface UserMapper {
     @Insert("insert into t_user(username,phone,password,state,age,registertime)  " +
             "values(#{username},#{phone},#{password},#{state},#{age},#{registertime})")
     int add(RegisterParam registerParam);
 
     @Select("select * from t_user where phone=#{phone} and password=#{password}")
-    Users getUser(@Param("phone") String phone, @Param("password") String password);
+    User getUser(@Param("phone") String phone, @Param("password") String password);
 
     @Select("select * from t_user where phone=#{phone}")
-    Users selectPhone(String phone);
+    User selectPhone(String phone);
 
     @Select("select * from t_user where id=#{id}")
-    Users findById(long id);
+    User findById(long id);
 }

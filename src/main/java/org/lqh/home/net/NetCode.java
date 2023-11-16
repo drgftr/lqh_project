@@ -158,4 +158,16 @@ public class NetCode {
      * 传入参数错误
      */
     public static final int TYPE_ERROR = 0x45;
+    /**
+     * 传入的数据不是0 或 1
+     */
+    public static final int STATE_ERROR = 0x46;
+    /**
+     * 用户寻主添加数据库失败
+     */
+    public static final int ADD_ERROR = 0X47;
+    /**
+     * 没有店铺
+     */
+    public static final int SHOP_LIST_IS_NULL = 0x48;
 }

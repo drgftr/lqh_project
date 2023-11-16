@@ -1,4 +1,4 @@
-package org.lqh.home.entity;
+package org.lqh.home.net.param;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @date: 2023/11/12
  **/
 @Data
-public class UserMsg implements Serializable {
+public class UserMsgParam implements Serializable {
     //id
     private long id;
 
@@ -49,9 +49,5 @@ public class UserMsg implements Serializable {
 
     //状态 0是上架了 1是没上架
     private int state;
-
-    //宠物种类
-    private Pet pet;
-
 
 }
