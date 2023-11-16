@@ -46,4 +46,7 @@ public interface UserMsgMapper {
 
     @Select("select * from user_msg where id=#{id}")
     UserMsg findById(long id);
+
+    @Select("select * from user_msg where id=#{id} and admin_id=#{adminId}")
+    UserMsg findByIdAndAdminId(@Param("id") long id,@Param("adminId") long adminId);
 }

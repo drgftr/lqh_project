@@ -39,4 +39,5 @@ public class Constants {
     public static final String PETSHOP_IS_BUY = "宠物已经被买走了";
     public static final String BUY_ERROR = "购买失败";
     public static final String BUY_SUCCESS = "购买成功";
+    public static final String TYPE_ERROR = "未知的登录请求";
 }

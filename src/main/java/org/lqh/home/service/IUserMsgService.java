@@ -31,4 +31,6 @@ public interface IUserMsgService {
     List<Long> getAllShopId();
 
     UserMsg findById(long id);
+
+    UserMsg findByIdAndAdminId(@Param("id") long id,@Param("adminId") long adminId);
 }

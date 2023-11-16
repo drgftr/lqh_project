@@ -154,4 +154,8 @@ public class NetCode {
      * 购买失败
      */
     public static final int BUY_ERROR = 0x44;
+    /**
+     * 传入参数错误
+     */
+    public static final int TYPE_ERROR = 0x45;
 }

@@ -75,4 +75,10 @@ public class UserMsgMapperTest {
         System.out.println("----");
         System.out.println(list);
     }
+
+    @Test
+    public void testFindByIdAndAdminId(){
+        System.out.println(userMsgMapper.findByIdAndAdminId(8,323));
+        System.out.println(userMsgMapper.findByIdAndAdminId(8,321));
+    }
 }

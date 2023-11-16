@@ -74,6 +74,7 @@ public class LoginController {
         if (!code.equals(expiredV)){
             return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_ERROR);
         }
+        //0 是用户登录
         if (loginParam.getType() == 0){
             try {
                  NetResult netResult = userService.login(loginParam);
@@ -81,7 +82,8 @@ public class LoginController {
         }catch (Exception e){
             return ResultGenerator.genFailResult("未知异常"+e.getMessage());
         }
-        }else {
+            // 1是管理员登录
+        }else if (loginParam.getType() == 1){
             try {
                 NetResult netResult = userService.adminLogin(loginParam);
                 return netResult;
@@ -89,15 +91,17 @@ public class LoginController {
                 return ResultGenerator.genFailResult("未知异常"+e.getMessage());
             }
         }
+        //其他返回错误的信息给前台
+        return ResultGenerator.genErrorResult(NetCode.TYPE_ERROR,Constants.TYPE_ERROR);
     }
 
-    @GetMapping("/test")
-    public NetResult test(HttpServletRequest request){
-        Users user = (Users) redisTemplate.opsForValue().get(request.getHeader("token"));
-        System.out.println("---------");
-        System.out.println(user);
-        return ResultGenerator.genSuccessResult(user);
-    }
+//    @GetMapping("/test")
+//    public NetResult test(HttpServletRequest request){
+//        Users user = (Users) redisTemplate.opsForValue().get(request.getHeader("token"));
+//        System.out.println("---------");
+//        System.out.println(user);
+//        return ResultGenerator.genSuccessResult(user);
+//    }
 
 
     //验证

@@ -173,8 +173,8 @@ public class UserController {
 //        if(!allId.contains(id)){
 //            return ResultGenerator.genErrorResult(NetCode.LIST_IS_NULL,Constants.LIST_IS_NULL);
 //        }
-        //根据id找寻主信息
-        UserMsg userMsg = iUserMsgService.findById(id);
+        //根据id 和管理员id找寻主信息
+        UserMsg userMsg = iUserMsgService.findByIdAndAdminId(id,employee.getId());
         //判断数据库有无这个信息
         if (userMsg==null){
             return ResultGenerator.genErrorResult(NetCode.LIST_IS_NULL,Constants.LIST_IS_NULL);
@@ -407,10 +407,20 @@ public class UserController {
             return ResultGenerator.genErrorResult(NetCode.SHOP_IS_NULL,Constants.SHOPPET_IS_NULL);
         }
         List<PetShop> shopList = iPetShopService.getShopList(shopId);
-        //把成本价设置成0 不能给用户看
+        //List<UserMsg> userMsgList = iUserMsgService.findById()
+        UserMsg userMsg = null;
         for (PetShop petShop  : shopList){
+            userMsg = iUserMsgService.findById(petShop.getUsermsg_id());
+            //把成本价设置成0 不能给用户看
+            userMsg.setPrice(0);
+            //设置宠物的信息
+            petShop.setUserMsg(userMsg);
+            //把成本价设置成0 不能给用户看
             petShop.setCostPrice(0);
+            //设置宠物种类
+            petShop.setPet(iPetService.findById(userMsg.getPet_id()));
         }
+
         return ResultGenerator.genSuccessResult(shopList);
     }
 

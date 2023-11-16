@@ -66,4 +66,9 @@ public class UserMsgService implements IUserMsgService {
     public UserMsg findById(long id) {
         return userMsgMapper.findById(id);
     }
+
+    @Override
+    public UserMsg findByIdAndAdminId(long id, long adminId) {
+        return userMsgMapper.findByIdAndAdminId(id, adminId);
+    }
 }

@@ -18,6 +18,7 @@ public class PetShop {
     private long admin_id;
     //店铺id
     private long shop_id;
+    //private long pet_id;
     //宠物名
     private String name;
     //开始销售时间
