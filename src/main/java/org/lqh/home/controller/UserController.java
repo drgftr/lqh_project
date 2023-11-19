@@ -2,14 +2,11 @@ package org.lqh.home.controller;
 
 import org.lqh.home.common.Constants;
 import org.lqh.home.entity.*;
+import org.lqh.home.net.LoggerMsg;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
 import org.lqh.home.service.*;
-import org.lqh.home.utils.AddressDistanceComparator;
-import org.lqh.home.utils.GaoDeMapUtil;
-import org.lqh.home.utils.ResultGenerator;
-import org.lqh.home.utils.StringUtil;
-import org.slf4j.LoggerFactory;
+import org.lqh.home.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @description: TODO 类描述
@@ -39,10 +35,13 @@ public class UserController {
 
     private IPetShopService iPetShopService;
 
+    private IEmployeeService iEmployeeService;
+
     @Autowired
-    public UserController(IUserMsgService iUserMsgService, IShopService iShopService
+    public UserController(IUserMsgService iUserMsgService, IShopService iShopService,IEmployeeService iEmployeeService
             , IPetService iPetService, RedisTemplate redisTemplate
             , IPetShopService iPetShopService) {
+        this.iEmployeeService = iEmployeeService;
         this.iUserMsgService = iUserMsgService;
         this.iShopService = iShopService;
         this.iPetService = iPetService;
@@ -53,7 +52,7 @@ public class UserController {
     @PostMapping("/publish")
     public NetResult publishTask(@RequestBody UserMsg userMsg, HttpServletRequest request) {
         String token = request.getHeader("token");
-        Object object = redisTemplate.opsForValue().get(token);
+        Object object = redisTemplate.opsForValue().get(RedisKeyUtil.getTokenRedisKey(token));
         //判断token过期没
         if (object == null) {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
@@ -97,9 +96,8 @@ public class UserController {
         for (Shop value : shopList) {
             try {
                 locations.add(GaoDeMapUtil.getLngAndLag(value.getAddress()));
-
             } catch (UnsupportedEncodingException e) {
-                LoggerFactory.getLogger(UserController.class).error(e.getMessage());
+                LoggerMsg.errorMsg(e);
             }
         }
 
@@ -123,8 +121,14 @@ public class UserController {
         userMsg.setShop_id(shop.getId());
         //添加时间
         userMsg.setCreatetime(System.currentTimeMillis());
+        //Employee employee = iEmployeeService.findById(shop.getAdmin_id());
         //设置adminid
         userMsg.setAdmin_id(shop.getAdmin_id());
+        Pet pet = iPetService.findById(userMsg.getPet_id());
+        //判断有没有这个宠物信息 ，没有返回非法数据
+        if (pet==null){
+            return ResultGenerator.genErrorResult(NetCode.PET_TYPE_ERROR,Constants.STATE_ERROR);
+        }
         //设置宠物类型
         userMsg.setPet_id(userMsg.getPet_id());
         //设置用户（发布者）id
@@ -143,7 +147,7 @@ public class UserController {
     @PostMapping("/dispose")
     public NetResult disposePet(double price, long id, HttpServletRequest request) {
         String token = request.getHeader("token");
-        Object object = redisTemplate.opsForValue().get(token);
+        Object object = redisTemplate.opsForValue().get(RedisKeyUtil.getTokenRedisKey(token));
         //判断token过期没
         if (object == null) {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
@@ -190,7 +194,7 @@ public class UserController {
     public NetResult buyPet(long id, HttpServletRequest request) {
         String token = request.getHeader("token");
 
-        Object object = redisTemplate.opsForValue().get(token);
+        Object object = redisTemplate.opsForValue().get(RedisKeyUtil.getTokenRedisKey(token));
         //判断token过期没
         if (object == null) {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
@@ -235,7 +239,7 @@ public class UserController {
     @GetMapping("/pettype")
     public NetResult petList(int state, HttpServletRequest request) {
         String token = request.getHeader("token");
-        Object object = redisTemplate.opsForValue().get(token);
+        Object object = redisTemplate.opsForValue().get(RedisKeyUtil.getTokenRedisKey(token));
         //判断token过期没
         if (object == null) {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
@@ -268,7 +272,7 @@ public class UserController {
     public NetResult userList(HttpServletRequest request) {
         String token = request.getHeader("token");
 
-        Object object = redisTemplate.opsForValue().get(token);
+        Object object = redisTemplate.opsForValue().get(RedisKeyUtil.getTokenRedisKey(token));
         //判断token过期没
         if (object == null) {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
@@ -293,7 +297,7 @@ public class UserController {
     @GetMapping("/shoplist")
     public NetResult shopList(HttpServletRequest request) {
         String token = request.getHeader("token");
-        Object object = redisTemplate.opsForValue().get(token);
+        Object object = redisTemplate.opsForValue().get(RedisKeyUtil.getTokenRedisKey(token));
         //判断token过期没
         if (object == null) {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);
@@ -314,7 +318,7 @@ public class UserController {
     public NetResult shopPetList(long shopId, HttpServletRequest request) {
         String token = request.getHeader("token");
 
-        Object object = redisTemplate.opsForValue().get(token);
+        Object object = redisTemplate.opsForValue().get(RedisKeyUtil.getTokenRedisKey(token));
         //判断token过期没
         if (object == null) {
             return ResultGenerator.genErrorResult(NetCode.TOKEN_INVALID, Constants.INVALID_TOKEN);

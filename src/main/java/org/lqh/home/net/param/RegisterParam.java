@@ -11,7 +11,6 @@ import java.io.Serializable;
  **/
 @Data
 public class RegisterParam implements Serializable {
-    //private User users;
     private String code;
     private String username;
     private String phone;

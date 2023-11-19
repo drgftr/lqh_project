@@ -8,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @date: 2023/11/12
  **/
 public class RandomCode {
-    public static String getCode(){
+    public static final String getCode(){
         return String.format("%06d", ThreadLocalRandom.current().nextInt(1000000));
     }
 }

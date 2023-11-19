@@ -4,7 +4,6 @@ package org.lqh.home.service.impl;
 import org.lqh.home.common.Constants;
 import org.lqh.home.entity.Employee;
 import org.lqh.home.entity.User;
-import org.lqh.home.mapper.UserMapper;
 import org.lqh.home.net.NetCode;
 import org.lqh.home.net.NetResult;
 import org.lqh.home.net.param.LoginParam;
@@ -60,7 +59,7 @@ public class LoginService implements ILoginService {
         }
 
         //已被注册
-        if (iUserService.findByPhone(phone)!=null) {
+        if (iUserService.findByPhone(phone) != null) {
             return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, "手机号已注册");
         }
         Long lastSandTime = 0L;
@@ -79,7 +78,7 @@ public class LoginService implements ILoginService {
 
         String expiredV = redisService.getValue(phone + phone);
         if (StringUtil.isNullOrNullStr(expiredV)) {
-            String code = "123456" ; //+ System.currentTimeMillis()
+            String code = "123456"; //+ System.currentTimeMillis()
             redisService.cacheValue(phone + phone, code, 60);
 //            CodeResBeam
             return ResultGenerator.genSuccessResult(code);
@@ -90,29 +89,30 @@ public class LoginService implements ILoginService {
     }
 
     @Override
-    public NetResult login(LoginParam loginParam){
+    public NetResult login(LoginParam loginParam) {
+        String phone = loginParam.getPhone();
         loginParam.setPassword(MD5Util.MD5Encode(loginParam.getPassword(), "utf-8"));
         //随机生成一个token
         String token = UUID.randomUUID().toString();
         //如果type=0则为普通用户，type=1则为管理员
-        if (loginParam.getType() == 0){
+        if (loginParam.getType() == 0) {
             //找这个用户
-            User user = iUserService.getUser(loginParam.getPhone(),loginParam.getPassword());
+            User user = iUserService.getUser(phone, loginParam.getPassword());
             //如果用户存在
-            if(user != null){
+            if (user != null) {
                 //设置token
                 user.setToken(token);
                 //把密码设置成null 保密
                 user.setPassword(null);
                 //把用户数据存入redis中 要用token取
-                redisTemplate.opsForValue().set(token, user, 30, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(RedisKeyUtil.getTokenRedisKey(token), user, 30, TimeUnit.MINUTES);
                 return ResultGenerator.genSuccessResult(user);
             }
             //不存在返回用户账号密码错误
-            return ResultGenerator.genErrorResult(NetCode.LOGIN_ERROR,Constants.LOGIN_ERROR);
-        }else if(loginParam.getType()==1){
+            return ResultGenerator.genErrorResult(NetCode.LOGIN_ERROR, Constants.LOGIN_ERROR);
+        } else if (loginParam.getType() == 1) {
             //找到这个管理员
-            Employee employee = iEmployeeService.select(loginParam.getPhone(),loginParam.getPassword());
+            Employee employee = iEmployeeService.getAdmin(phone, loginParam.getPassword());
             //如果存在
             if (employee != null) {
                 //设置token
@@ -120,12 +120,12 @@ public class LoginService implements ILoginService {
                 //把密码设置成null 保密
                 employee.setPassword(null);
                 //把管理员数据存入redis中 要用token取
-                redisTemplate.opsForValue().set(token, employee, 30, TimeUnit.MINUTES);
+                redisTemplate.opsForValue().set(RedisKeyUtil.getTokenRedisKey(token), employee, 30, TimeUnit.MINUTES);
                 return ResultGenerator.genSuccessResult(employee);
             }
             //不存在返回管理员账号密码错误
-            return ResultGenerator.genErrorResult(NetCode.LOGIN_ERROR,Constants.ADMIN_IS_NULL);
-        }else{
+            return ResultGenerator.genErrorResult(NetCode.LOGIN_ERROR, Constants.ADMIN_IS_NULL);
+        } else {
             //不是1或0 返回非法请求
             return ResultGenerator.genErrorResult(NetCode.TYPE_ERROR, Constants.INVALID_REQUEST);
         }
@@ -133,47 +133,51 @@ public class LoginService implements ILoginService {
 
     //注册
     @Override
-    public NetResult  register(RegisterParam registerParam) {
-        String code = registerParam.getCode();
-        String expiredV = (String) redisTemplate.opsForValue().get(registerParam.getPhone());
-        //看看验证码过期没
-        if (StringUtil.isEmpty(expiredV)){
-            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_LAPSE);
-        }
-        //验证码输入是否正确
-        if (!code.equals(expiredV)){
-            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_ERROR);
-        }
+    public NetResult register(RegisterParam registerParam) {
 
         //判断账号是不是空
         if (StringUtil.isEmpty(registerParam.getUsername())) {
             return ResultGenerator.genErrorResult(NetCode.USERNAME_INVALID, Constants.NAME_IS_NULL);
         }
-
         //没密码给个123456
         if (StringUtil.isEmpty(registerParam.getPassword())) {
             registerParam.setPassword("123456");
         }
+        //md5加密
         registerParam.setPassword(MD5Util.MD5Encode(registerParam.getPassword(), "utf-8"));
 
         //面向成人的产品，不让未成年注册
-        if (registerParam.getAge()<18){
+        if (registerParam.getAge() < 18) {
             return ResultGenerator.genErrorResult(NetCode.AGE_INVALID, Constants.AGE_ERROR);
         }
 
+        //在数据库通过手机号找人
         User users1 = iUserService.findByPhone(registerParam.getPhone());
-        if(users1!=null){
-            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID,Constants.PHONE_OCCUPATION);
+        //找到了说明已经注册
+        if (users1 != null) {
+            //一个手机号只能注册一次
+            return ResultGenerator.genErrorResult(NetCode.PHONE_INVALID, Constants.PHONE_OCCUPATION);
+        }
+
+        String code = registerParam.getCode();
+        //从redis中获取验证码
+        String expiredV = (String) redisTemplate.opsForValue().get(RedisKeyUtil.getSMSRedisKey(registerParam.getPhone()));
+        //验证码输入是否正确
+        if (!code.equals(expiredV)) {
+            return ResultGenerator.genErrorResult(NetCode.CODE_ERROR, Constants.CODE_ERROR);
         }
 
         //设置当前时间
         registerParam.setRegistertime(System.currentTimeMillis());
-        try {
-            iUserService.add(registerParam);
-            return ResultGenerator.genSuccessResult("注册成功");
-        }catch (Exception e){
-            return ResultGenerator.genFailResult("注册失败"+e.getMessage());
+        //判断数据加到数据库中没
+        int result = iUserService.add(registerParam);
+        //没加进去
+        if (result == 0){
+            //返回注册失败
+            return ResultGenerator.genFailResult("注册失败");
         }
+        //返回注册成功
+        return ResultGenerator.genSuccessResult("注册成功");
     }
 
 
