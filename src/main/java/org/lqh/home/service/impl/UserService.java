@@ -39,4 +39,9 @@ public class UserService implements IUserService {
     public User findById(long id) {
         return userMapper.findById(id);
     }
+
+    @Override
+    public int settlementById(double money, long id) {
+        return userMapper.settlementById(money, id);
+    }
 }

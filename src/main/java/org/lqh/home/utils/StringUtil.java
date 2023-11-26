@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 /**
  * @description: TODO 类描述
@@ -12,6 +13,8 @@ import java.nio.charset.StandardCharsets;
  * @date: 2023/10/31
  **/
 public class StringUtil {
+//    private static final java.util.UUID UUID = new UUID();
+
     /**
      * 判断s是否为null
      *
@@ -41,4 +44,8 @@ public class StringUtil {
         }
     }
 
+    public static String getUUID() {
+        String replaceUUID = UUID.randomUUID().toString().replace("-", "");
+        return replaceUUID;
+    }
 }

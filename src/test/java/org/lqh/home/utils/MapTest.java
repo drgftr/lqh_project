@@ -1,4 +1,4 @@
-package org.lqh.home;
+package org.lqh.home.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;

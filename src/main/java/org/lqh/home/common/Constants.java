@@ -45,4 +45,14 @@ public class Constants {
     public static final String ADD_SUCCESS = "添加成功";
     public static final String SHOP_ERROR = "附近暂无店铺";
     public static final String ADDRESS_ERROR = "非法地址";
+    public static final String SALE_IS_NULL = "没有此商品";
+    public static final String OFFORON_ERROR = "上/下架错误";
+    public static final String OFFORON_SUCCESS = "上/下架成功";
+    public static final String ONSALE_ERROR = "上架失败";
+    public static final String OFFSALE_ERROR = "下架失败";
+    public static final String PAGE_ERROR = "没有此页面";
+    public static final String AMOUNT_ERROR = "购买数量错误";
+    public static final String MONEY_IACK = "余额不足";
+    public static final String SETTLEMENT_ERROR = "结算失败";
+    public static final String SALE_ERROR = "商品未上架";
 }

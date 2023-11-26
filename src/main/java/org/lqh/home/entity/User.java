@@ -25,6 +25,7 @@ public class User implements Serializable {
     private int age;
     //注册时间
     private Long registerTime;
+    private double money;
     //token
     private String token;
 }

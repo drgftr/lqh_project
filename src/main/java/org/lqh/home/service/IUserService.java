@@ -17,4 +17,6 @@ public interface IUserService {
     User findByPhone(String phone);
 
     User findById(long id);
+
+    int settlementById(@Param("money") double money,@Param("id") long id);
 }

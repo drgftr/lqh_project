@@ -170,4 +170,33 @@ public class NetCode {
      * 没有店铺
      */
     public static final int SHOP_LIST_IS_NULL = 0x48;
+    /**
+     * 没有此商品
+     */
+    public static final int SALE_IS_NULL = 0x49;
+    /**
+     * 上下架错误
+     */
+    public static final int OFFORON_ERROR = 0X50;
+    /**
+     *下架错误
+     */
+    public static final int ONSALE_ERROR = 0x51;
+
+    /**
+     * 上架错误
+     */
+    public static final int OFFSALE_ERROR = 0X52;
+    /**
+     * 页面错误
+     */
+    public static final int PAGE_ERROR = 0x53;
+    /**
+     * 购买数量错误
+     */
+    public static final int AMOUNT_ERROR = 0x54;
+    /**
+     * 结算失败
+     */
+    public static final int SETTLEMENT_ERROR = 0x55;
 }

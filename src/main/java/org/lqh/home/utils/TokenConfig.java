@@ -29,8 +29,14 @@ public class TokenConfig implements WebMvcConfigurer {
         InterceptorRegistration registration = registry.addInterceptor(new TokenInterceptor(redisTemplate));
         registration.addPathPatterns("/**");  //所以路径都被拦截
         registration.excludePathPatterns(   //添加不拦截路径
+                "/pay/generateOrders",
+                "/pay/cancelOrder",
+                "/pay/payOrder",
+                "/pay/getAllOrder",
                 "/test",
+                "/order",
                 "/user/publish",
+                "/sale/offOrOn",
                 "/getverifycode",
                 "/login",                   //登录
                 "/**/*.html",               //html静态资源
